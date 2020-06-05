@@ -1,0 +1,41 @@
+# 项目的相关配置
+deploytools:
+  name: one-click deployment tools
+  version: 1.0
+  fileUploadPath:
+server:
+  port: 8080
+  tomcat:
+    max-connections: 200
+    uri-encoding: utf-8
+    max-http-form-post-size: 0
+    threads:
+      max: 300
+# spring环境基本配置
+spring:
+  profiles: # 选取的 application-*.yml 文件
+    active: dev
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 30MB
+  devtools: # 启动热部署
+    restart:
+      enabled: true
+  mvc: # 静态资源文件的路径
+    static-path-pattern: /static/**
+  thymeleaf: # thymeleaf 模板引擎的基本配置
+    mode: HTML5
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: utf-8
+    cache: false
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-mm-dd HH:mm:ss
+
+pagehelper: # 分页器配置
+  dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
