@@ -1,38 +1,38 @@
 package com.cfg.deploytools.controller;
 
 import com.cfg.deploytools.common.domain.AjaxResult;
-import com.cfg.deploytools.service.TaskService;
+import com.cfg.deploytools.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * ClassName: TaskController
+ * ClassName: ProjectController
  * Description:
- * date: 2020/6/5 9:17
+ * date: 2020/6/8 11:29
  *
  * @author CFG
  * @since JDK 1.8
  */
-@RequestMapping("/cfg_dt/task")
+@RequestMapping("/cfg_dt/project")
 @Controller
-public class TaskController {
+public class ProjectController {
 
     @Autowired
-    private TaskService taskService;
-
+    private ProjectService projectService;
+    
     /*
      * @Author wadreamer
-     * @Description //TODO 根据任务列表，获取任务详情
-     * @Date 11:39 2020/6/8
-     * @Param [taskId]
+     * @Description //TODO 根据项目工程主键，获取该项目工程下的任务列表
+     * @Date 11:31 2020/6/8
+     * @Param [projectId]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
-    @PostMapping("/{taskId}")
-    public AjaxResult getTaskDetail(String taskId){
-
+    @RequestMapping("/{projectId}")
+    public AjaxResult getTaskList(String projectId){
+        
         return null;
     }
+
 
 }
