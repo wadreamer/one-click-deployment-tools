@@ -1,4 +1,4 @@
-package com.cfg.deploytools.Shiro.service;
+package com.cfg.deploytools.shiro.service;
 
 import com.cfg.deploytools.mapper.UserMapper;
 import com.cfg.deploytools.model.User;

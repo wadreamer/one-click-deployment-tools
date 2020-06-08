@@ -1,7 +1,7 @@
-package com.cfg.deploytools.Shiro.config;
+package com.cfg.deploytools.shiro.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import com.cfg.deploytools.Shiro.service.MyShiroRealm;
+import com.cfg.deploytools.shiro.service.MyShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;

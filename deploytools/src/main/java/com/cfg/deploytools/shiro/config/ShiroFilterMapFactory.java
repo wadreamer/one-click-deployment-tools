@@ -1,4 +1,4 @@
-package com.cfg.deploytools.Shiro.config;
+package com.cfg.deploytools.shiro.config;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
