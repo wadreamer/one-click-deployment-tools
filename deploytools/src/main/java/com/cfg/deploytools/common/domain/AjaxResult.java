@@ -63,7 +63,7 @@ public class AjaxResult extends HashMap<String, Object> {
     public static AjaxResult success() {
         return success("操作成功");
     }
-    
+
     /*
      * @Author wadreamer
      * @Description //TODO 自定义操作成功的描述语句
@@ -94,7 +94,7 @@ public class AjaxResult extends HashMap<String, Object> {
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
     public static AjaxResult success(int code, Object data) {
-        return success(code, "", data);
+        return success(code, "操作成功", data);
     }
 
     /*

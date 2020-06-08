@@ -26,7 +26,7 @@ public class File implements Serializable {
     private String sqlData; // SQL内容
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Timestamp updateTime; // 文件提交时间
+    private Timestamp uploadTime; // 文件提交时间
 
     private Integer type; // 文件类型 0表示文件 1表示SQL内容
 
@@ -62,12 +62,12 @@ public class File implements Serializable {
         this.sqlData = sqlData;
     }
 
-    public Timestamp getUpdateTime() {
-        return updateTime;
+    public Timestamp getUploadTime() {
+        return uploadTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
-        this.updateTime = updateTime;
+    public void setUploadTime(Timestamp updateTime) {
+        this.uploadTime = updateTime;
     }
 
     public Integer getType() {

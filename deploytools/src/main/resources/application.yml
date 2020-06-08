@@ -13,7 +13,7 @@ server:
       max: 300
 # spring环境基本配置
 spring:
-  profiles: # 选取的 application-*.yml 文件
+  profiles: # 选取的 application-*yml 文件.
     active: dev
   servlet:
     multipart:

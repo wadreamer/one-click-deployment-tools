@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * ClassName: LoginController
@@ -15,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author CFG
  * @since JDK 1.8
  */
-@RequestMapping("/cfg_dt/login")
+@RequestMapping("/cfg_dt")
 @Controller
 public class LoginController {
-
 
     /*
      * @Author wadreamer
@@ -27,6 +27,7 @@ public class LoginController {
      * @Param [user]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
+    @ResponseBody
     @GetMapping("/login")
     public AjaxResult login(User user){
 

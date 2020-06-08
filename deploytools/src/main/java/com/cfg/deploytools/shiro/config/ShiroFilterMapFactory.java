@@ -52,7 +52,8 @@ public class ShiroFilterMapFactory {
         filterChainDefinitionMap.put("/ApiController/**", "anon");
 
         //对所有页面进行认证
-        filterChainDefinitionMap.put("/**","authc");
+        // filterChainDefinitionMap.put("/**","authc");
+        filterChainDefinitionMap.put("/**","anon");
         return filterChainDefinitionMap;
     }
 }

@@ -22,7 +22,13 @@ import java.io.IOException;
  * 创建时间:2019/2/15 13:14
  * Version 1.0
  */
-
+/*
+ * @Author wadreamer
+ * @Description //TODO 去掉druid底部广告的配置类
+ * @Date 13:57 2020/6/8
+ * @Param 
+ * @return 
+ **/
 @Configuration
 @ConditionalOnWebApplication
 @AutoConfigureAfter(DruidDataSourceAutoConfigure.class)
@@ -30,13 +36,13 @@ import java.io.IOException;
 public class RemoveDruidAdConfig {
 
 
-    /**
-     * 方法名: removeDruidAdFilterRegistrationBean
-     * 方法描述:  除去页面底部的广告
-     * @param properties
+    /*
+     * @Author wadreamer
+     * @Description //TODO 去除页面底部的广告
+     * @Date 13:58 2020/6/8
+     * @Param [properties]
      * @return org.springframework.boot.web.servlet.FilterRegistrationBean
-     * @throws
-     */
+     **/
     @SuppressWarnings("rawtypes")
 	@Bean
     public FilterRegistrationBean removeDruidAdFilterRegistrationBean(DruidStatProperties properties) {

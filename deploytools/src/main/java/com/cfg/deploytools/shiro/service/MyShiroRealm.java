@@ -41,13 +41,12 @@ public class MyShiroRealm extends AuthorizingRealm {
         if (token.getPrincipal() == null) {
             return null;
         }
-		String username = (String) token.getPrincipal();
+		String account = (String) token.getPrincipal();
 		String password = new String((char[]) token.getCredentials());
 		// 通过username从数据库中查找 User对象，如果找到，没找到.
 		// 实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
-		User userInfo = userMapper.queryUserByAccount(username);
-//		System.out.println(userInfo);
-//		System.out.println("----->>userInfo=" + userInfo.getUsername() + "---"+ userInfo.getPassword());
+		User userInfo = userMapper.queryUserByAccount(account);
+
 		if (userInfo == null)
 			return null;
 		else{
@@ -66,7 +65,6 @@ public class MyShiroRealm extends AuthorizingRealm {
      */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		//System.out.println("权限配置-->MyShiroRealm.doGetAuthorizationInfo()");
 		if(principals == null){
 	       throw new AuthorizationException("principals should not be null");
 	    }

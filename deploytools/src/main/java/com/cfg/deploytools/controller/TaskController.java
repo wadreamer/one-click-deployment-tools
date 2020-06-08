@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * ClassName: TaskController
@@ -29,10 +30,12 @@ public class TaskController {
      * @Param [taskId]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
+    @ResponseBody
     @PostMapping("/{taskId}")
     public AjaxResult getTaskDetail(String taskId){
 
         return null;
     }
+
 
 }

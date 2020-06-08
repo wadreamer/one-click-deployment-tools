@@ -1,6 +1,5 @@
 package com.cfg.deploytools.shiro.config;
 
-import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.cfg.deploytools.shiro.service.MyShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.CacheManager;
@@ -17,6 +16,9 @@ import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.cfg.deploytools.shiro.service.MyShiroRealm;
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+
 
 /**
  * ClassName: ShiroConfig
@@ -38,11 +40,11 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilterFactoryBean(org.apache.shiro.mgt.SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         //登录
-        shiroFilterFactoryBean.setLoginUrl("/admin/login");
+        shiroFilterFactoryBean.setLoginUrl("/cfg_dt/login");
         //首页
-        shiroFilterFactoryBean.setSuccessUrl("/");
+        // shiroFilterFactoryBean.setSuccessUrl("/cfg_dt/login");
         //错误页面，认证不通过跳转
-        shiroFilterFactoryBean.setUnauthorizedUrl("/error/403");
+        // shiroFilterFactoryBean.setUnauthorizedUrl("/error/403");
         //页面权限控制
         shiroFilterFactoryBean.setFilterChainDefinitionMap(ShiroFilterMapFactory.shiroFilterMap());
 

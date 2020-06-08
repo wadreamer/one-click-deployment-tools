@@ -24,15 +24,29 @@ public class FileController {
     @Autowired
     private FileService fileService;
 
-    @PostMapping("/fileUpload")
+    /*
+     * @Author wadreamer
+     * @Description //TODO 多文件上传
+     * @Date 11:49 2020/6/8
+     * @Param [files]
+     * @return com.cfg.deploytools.common.domain.AjaxResult
+     **/
     @ResponseBody
+    @PostMapping("/fileUpload")
     public AjaxResult fileUpload(MultipartFile[] files){
 
         return null;
     }
 
-    @PostMapping("/fileDownload/{fileId}")
+    /*
+     * @Author wadreamer
+     * @Description //TODO 多文件下载
+     * @Date 11:50 2020/6/8
+     * @Param [fileId]
+     * @return com.cfg.deploytools.common.domain.AjaxResult
+     **/
     @ResponseBody
+    @PostMapping("/fileDownload/{fileId}")
     public AjaxResult fileDownload(String fileId){
 
         return null;

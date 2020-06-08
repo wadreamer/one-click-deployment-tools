@@ -20,13 +20,13 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Mybatis多数据源配置
- * 参考文章：https://www.cnblogs.com/geekdc/p/10963476.html
- * @ClassName: MybatisConfig
- * @author fuce
- * @date 2019-12-06 21:11
- */
+/*
+ * @Author wadreamer
+ * @Description //TODO Mybatis多数据源配置 参考文章：https://www.cnblogs.com/geekdc/p/10963476.html
+ * @Date 14:01 2020/6/8
+ * @Param 
+ * @return 
+ **/
 @Configuration
 @MapperScan(basePackages = "com.cfg.deploytools.mapper")
 public class MybatisConfig {
@@ -39,20 +39,20 @@ public class MybatisConfig {
     }
 
     @Bean
-    @ConfigurationProperties("spring.datasource.druid.slave")
-    @ConditionalOnProperty(prefix = "spring.datasource.druid.slave", name = "enabled", havingValue = "true")
-    public DataSource slaveDataSource()
+    @ConfigurationProperties("spring.datasource.druid.salve")
+    @ConditionalOnProperty(prefix = "spring.datasource.druid.salve", name = "enabled", havingValue = "true")
+    public DataSource salveDataSource()
     {
         return DruidDataSourceBuilder.create().build();
     }
 
     @Bean(name = "dynamicDataSource")
     @Primary
-    public DynamicDataSource dataSource(DataSource masterDataSource, DataSource slaveDataSource)
+    public DynamicDataSource dataSource(DataSource masterDataSource, DataSource salveDataSource)
     {
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DataSourceType.MASTER.name(), masterDataSource);
-    	targetDataSources.put(DataSourceType.SALVE.name(),slaveDataSource);
+    	targetDataSources.put(DataSourceType.SALVE.name(),salveDataSource);
         return new DynamicDataSource(masterDataSource(), targetDataSources);
     }
 
@@ -62,7 +62,7 @@ public class MybatisConfig {
         factoryBean.setDataSource(dynamicDataSource);
 //        factoryBean.setTypeAliasesPackage();
         // 设置mapper.xml的位置路径
-        Resource[] resources = new PathMatchingResourcePatternResolver().getResources("classpath*:mybatis/*/*.xml");
+        Resource[] resources = new PathMatchingResourcePatternResolver().getResources("classpath*:mybatis/*.xml");
         factoryBean.setMapperLocations(resources);
         return factoryBean.getObject();
     }

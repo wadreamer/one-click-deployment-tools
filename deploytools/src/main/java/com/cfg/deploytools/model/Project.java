@@ -14,23 +14,23 @@ public class Project implements Serializable {
 
     private static final long serialVersionUID = -3955537104443305360L;
 
-    private Integer projectId;
+    private Integer id;
 
-    private String projectName;
+    private String name;
 
-    public Integer getProjectId() {
-        return projectId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public String getName() {
+        return name;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setName(String name) {
+        this.name = name;
     }
 }
