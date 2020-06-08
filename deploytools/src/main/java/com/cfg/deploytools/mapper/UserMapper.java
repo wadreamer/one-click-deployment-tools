@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.Param;
  * @since JDK 1.8
  */
 public interface UserMapper {
+
     User queryUserByAccount(@Param("account") String account); // 根据用户名查找用户
 
 }

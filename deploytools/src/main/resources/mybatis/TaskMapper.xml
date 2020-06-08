@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cfg.deploytools.mapper.TaskMapper">
+    <resultMap id="BaseResultMap" type="com.cfg.deploytools.model.Task">
+        <id column="id" property="taskId" jdbcType="INTEGER"/>
+        <result column="project" property="projectId" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="openedBy" property="openedBy" jdbcType="VARCHAR"/>
+        <result column="openedDate" property="openedDate" jdbcType="TIMESTAMP"/>
+        <result column="finishedBy" property="finishedBy" jdbcType="VARCHAR"/>
+        <result column="finishedDate" property="finishedDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+    <select id="getTaskListByProjectId" resultMap="BaseResultMap" parameterType="Integer">
+        select id, project, name, status, openedBy, openedDate, finishedBy, finishedDate
+        from zt_task
+        where project = #{projectId}
+        and id not in (
+        select task_id from cfg_taskstatus
+        )
+    </select>
+
+    <select id="getTaskListByProjectId2" resultMap="BaseResultMap" parameterType="Integer">
+        select t.id, t.project, t.name, t.openedBy, t.openedDate, t.finishedBy, t.finishedDate,
+        ts.status, ts.task_id, ts.project_id
+        from cfg_taskstatus ts, zt_task t
+        where t.project = ts.project_id and ts.project_id = #{projectId}
+    </select>
+
+</mapper>

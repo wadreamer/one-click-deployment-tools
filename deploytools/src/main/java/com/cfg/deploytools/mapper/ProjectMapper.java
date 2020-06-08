@@ -18,6 +18,4 @@ public interface ProjectMapper {
 
     List<Project> getProjectList();
 
-    // List<Task> getTaskListByProjectId(@Param("id") Integer id);
-
 }

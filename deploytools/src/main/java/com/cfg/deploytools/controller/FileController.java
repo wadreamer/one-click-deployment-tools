@@ -2,6 +2,7 @@ package com.cfg.deploytools.controller;
 
 import com.cfg.deploytools.common.domain.AjaxResult;
 import com.cfg.deploytools.service.FileService;
+import com.sun.org.apache.xpath.internal.operations.Mult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author CFG
  * @since JDK 1.8
  */
-@RequestMapping("/cfg_dt")
+@RequestMapping("/cfg_dt/file")
 @Controller
 public class FileController {
 
@@ -32,10 +33,18 @@ public class FileController {
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
     @ResponseBody
-    @PostMapping("/fileUpload")
-    public AjaxResult fileUpload(MultipartFile[] files){
+    @PostMapping("/upload")
+    public AjaxResult fileUpload(MultipartFile[] files) {
+        boolean flag = true;
+        try {
+            for (MultipartFile file : files) {
 
-        return null;
+            }
+            return flag ? AjaxResult.success(200, "上传成功") : AjaxResult.error("上传失败");
+        } catch (Exception e) {
+            return AjaxResult.error(e.getMessage());
+        }
+
     }
 
     /*
@@ -46,8 +55,8 @@ public class FileController {
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
     @ResponseBody
-    @PostMapping("/fileDownload/{fileId}")
-    public AjaxResult fileDownload(String fileId){
+    @PostMapping("/download/{fileId}")
+    public AjaxResult fileDownload(String fileId) {
 
         return null;
     }

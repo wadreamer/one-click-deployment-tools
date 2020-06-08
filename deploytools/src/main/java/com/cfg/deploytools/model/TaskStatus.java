@@ -17,7 +17,9 @@ public class TaskStatus implements Serializable {
 
     private Integer taskId; // 任务主键
 
-    private String taskStatus; // 任务状态
+    private Integer projectId; // 项目工程主键
+
+    private String status; // 任务状态
 
     public Integer getTaskId() {
         return taskId;
@@ -27,11 +29,19 @@ public class TaskStatus implements Serializable {
         this.taskId = taskId;
     }
 
-    public String getTaskStatus() {
-        return taskStatus;
+    public Integer getProjectId() {
+        return projectId;
     }
 
-    public void setTaskStatus(String taskStatus) {
-        this.taskStatus = taskStatus;
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -17,15 +17,15 @@ public class Task implements Serializable {
 
     private static final long serialVersionUID = -6537854290451339990L;
 
-    private Integer projectId;
-
     private Integer taskId;
+
+    private Integer projectId;
 
     private String name;
 
     private String status;
 
-    private String openBy;
+    private String openedBy;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp openedDate;
@@ -64,15 +64,19 @@ public class Task implements Serializable {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        if (status.equals("done")) {
+            this.status = "待测试";
+        }else {
+            this.status = status;
+        }
     }
 
-    public String getOpenBy() {
-        return openBy;
+    public String getOpenedBy() {
+        return openedBy;
     }
 
-    public void setOpenBy(String openBy) {
-        this.openBy = openBy;
+    public void setOpenedBy(String openBy) {
+        this.openedBy = openBy;
     }
 
     public Timestamp getOpenedDate() {

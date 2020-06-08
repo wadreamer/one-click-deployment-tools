@@ -1,5 +1,6 @@
 package com.cfg.deploytools.mapper;
 
+import com.cfg.deploytools.model.TaskStatus;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -19,6 +20,6 @@ public interface TaskStatusMapper {
      * @Param [taskId, status]
      * @return int 表示受影响的数据库记录数
      **/
-    int updateTaskStatusByTaskId(@Param("taskId") Integer taskId,@Param("status") String status);
+    int updateTaskStatusByTaskId(TaskStatus taskStatus);
 
 }

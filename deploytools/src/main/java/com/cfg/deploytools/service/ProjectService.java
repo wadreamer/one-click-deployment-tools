@@ -43,15 +43,4 @@ public class ProjectService {
         }
     }
 
-    // public AjaxResult getTaskListByProjectId(TableParse tableParse, int projectId) {
-    //     List<Task> taskList = projectMapper.getTaskListByProjectId(projectId);
-    //
-    //     if (taskList != null) {
-    //         PageHelper.startPage(tableParse.getPageNum(), tableParse.getPageSize());
-    //         PageInfo<Task> pageInfo = new PageInfo<>(taskList);
-    //         return AjaxResult.success(200, pageInfo);
-    //     } else {
-    //         return AjaxResult.error("操作失败，请稍后重试");
-    //     }
-    // }
 }
