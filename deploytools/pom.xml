@@ -54,10 +54,22 @@
             <version>1.1.10</version>
         </dependency>
 
-        <!-- 配置切面-->
+        <!-- shiro权限-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.4.0</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- shiro权限支持thymeleaf -->
+        <dependency>
+            <groupId>com.github.theborakompanioni</groupId>
+            <artifactId>thymeleaf-extras-shiro</artifactId>
+            <version>2.0.0</version>
         </dependency>
 
         <!-- 添加swagger2 -->
