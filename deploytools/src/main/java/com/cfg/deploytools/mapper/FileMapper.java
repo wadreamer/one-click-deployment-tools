@@ -21,4 +21,8 @@ public interface FileMapper {
     File queryFileNewestByFullPath(TaskFile taskFile);
 
     List<File> queryCurrentAllFileByTaskId(int taskId);
+
+    List<File> queryFileHistoryByFullPath(int fileId);
+
+    int insertSelectiveFile(File file);
 }

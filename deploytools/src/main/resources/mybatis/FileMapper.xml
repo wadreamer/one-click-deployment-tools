@@ -10,16 +10,16 @@
         <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP"/>
         <result column="type" property="type" jdbcType="INTEGER"/>
     </resultMap>
-    
+
     <delete id="deleteFileByFileIdArray">
-        delete from cfg_file 
+        delete from cfg_file
         where file_id
-        in 
+        in
         <foreach collection="taskFiles" open="(" close=")" item="item" separator=",">
             #{item.fileId}
         </foreach>
     </delete>
-    
+
     <select id="queryFileNewestByFullPath" resultMap="BaseResultMap" parameterType="com.cfg.deploytools.model.TaskFile">
         SELECT a.file_id, a.full_path, a.file_data, a.sql_data, a.upload_time, a.type
         FROM cfg_file a
@@ -30,7 +30,7 @@
         )
     </select>
 
-    <select id="queryCurrentAllFileByTaskId" parameterType= "Integer" resultMap="BaseResultMap">
+    <select id="queryCurrentAllFileByTaskId" parameterType="Integer" resultMap="BaseResultMap">
         select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type
         from cfg_file f
         where f.file_id in (
@@ -38,6 +38,47 @@
         )
     </select>
 
+    <select id="queryFileHistoryByFullPath" parameterType="Integer" resultMap="BaseResultMap">
+        select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type
+        from cfg_file f
+        where f.full_path in
+        (select full_path from cfg_file where file_id = #{fileId})
+        ORDER BY f.upload_time desc
+    </select>
+
+    <insert id="insertSelectiveFile" parameterType="com.cfg.deploytools.model.File" useGeneratedKeys="true">
+        insert into cfg_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fullPath != null">
+                full_path,
+            </if>
+            <if test="fileData != null">
+                file_data,
+            </if>
+            <if test="sqlData != null">
+                sql_data,
+            </if>
+                upload_time,
+            <if test="type != null">
+                type
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fullPath != null">
+                #{fullPath,jdbcType=VARCHAR},
+            </if>
+            <if test="fileData != null">
+                #{fileData,jdbcType=VARCHAR},
+            </if>
+            <if test="sqlData != null">
+                #{sqlData,jdbcType=VARCHAR},
+            </if>
+                now(),
+            <if test="type != null">
+                #{type,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </insert>
 
 
 </mapper>

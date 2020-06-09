@@ -1,14 +1,18 @@
 package com.cfg.deploytools.controller;
 
 import com.cfg.deploytools.common.domain.AjaxResult;
+import com.cfg.deploytools.model.File;
 import com.cfg.deploytools.service.FileService;
-import com.sun.org.apache.xpath.internal.operations.Mult;
+import com.cfg.deploytools.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * ClassName: FileController
@@ -32,20 +36,14 @@ public class FileController {
      * @Param [files]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
-    // @ResponseBody
-    // @PostMapping("/upload")
-    // public AjaxResult fileUpload(MultipartFile file,String fullPath) {
-    //     try {
-    //         if(!file.isEmpty()){
-    //             int result = fileService.insertFile(file,fullPath);
-    //             return result > 0 ? AjaxResult.success(200,"上传成功") :
-    //         }
-    //     } catch (Exception e) {
-    //         return AjaxResult.error(e.getMessage());
-    //     }
-    //
-    //     return AjaxResult.error("上传失败，请稍后重试");
-    // }
+    @ResponseBody
+    @PostMapping("/upload")
+    public AjaxResult fileUpload(MultipartFile file, String fullPath) {
+        if (!file.isEmpty()) {
+            return fileService.upload(file, fullPath);
+        }
+        return AjaxResult.error("上传失败，请稍后重试");
+    }
 
     /*
      * @Author wadreamer
@@ -60,5 +58,16 @@ public class FileController {
 
         return null;
     }
+
+    @ResponseBody
+    @RequestMapping("/history/{fileId}")
+    public AjaxResult fileHistory(@PathVariable("fileId") String fileId) {
+        List<File> list = fileService.getFileHistory(Integer.parseInt(fileId));
+        return list != null ? AjaxResult.success(200, list) : AjaxResult.error("操作失败，请稍后重试");
+    }
+
+    // @ResponseBody
+    // @RequestMapping("/sqlpreview")
+    // public AjaxResult SQLPreview(String taskId,String fileId){}
 
 }
