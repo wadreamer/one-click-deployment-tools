@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cfg.deploytools.mapper.TaskFileMapper">
+
+    <resultMap id="BaseResultMap" type="com.cfg.deploytools.model.TaskFile">
+        <id column="task_id" property="taskId" jdbcType="INTEGER"/>
+        <result column="full_path" property="fullPath" jdbcType="VARCHAR"/>
+        <result column="file_id" property="fileId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="getTaskFileListByTaskId" parameterType="Integer" resultMap="BaseResultMap">
+        select task_id, full_path, file_id
+        from cfg_taskfile
+        where task_id = #{taskId}
+    </select>
+
+    <delete id="deleteTaskFile">
+        delete from cfg_taskfile
+        where file_id
+        in
+        <foreach collection="taskFiles" open="(" close=")" item="item" separator=",">
+            #{item.fileId}
+        </foreach>
+    </delete>
+
+
+</mapper>

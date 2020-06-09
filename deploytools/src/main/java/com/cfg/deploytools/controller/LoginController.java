@@ -30,7 +30,7 @@ public class LoginController {
     @ResponseBody
     @GetMapping("/login")
     public AjaxResult login(User user){
-
+        System.out.println(user);
         return null;
     }
 

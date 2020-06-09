@@ -32,20 +32,20 @@ public class FileController {
      * @Param [files]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
-    @ResponseBody
-    @PostMapping("/upload")
-    public AjaxResult fileUpload(MultipartFile[] files) {
-        boolean flag = true;
-        try {
-            for (MultipartFile file : files) {
-
-            }
-            return flag ? AjaxResult.success(200, "上传成功") : AjaxResult.error("上传失败");
-        } catch (Exception e) {
-            return AjaxResult.error(e.getMessage());
-        }
-
-    }
+    // @ResponseBody
+    // @PostMapping("/upload")
+    // public AjaxResult fileUpload(MultipartFile file,String fullPath) {
+    //     try {
+    //         if(!file.isEmpty()){
+    //             int result = fileService.insertFile(file,fullPath);
+    //             return result > 0 ? AjaxResult.success(200,"上传成功") :
+    //         }
+    //     } catch (Exception e) {
+    //         return AjaxResult.error(e.getMessage());
+    //     }
+    //
+    //     return AjaxResult.error("上传失败，请稍后重试");
+    // }
 
     /*
      * @Author wadreamer

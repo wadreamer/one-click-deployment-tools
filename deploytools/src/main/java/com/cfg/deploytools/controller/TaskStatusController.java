@@ -28,16 +28,47 @@ public class TaskStatusController {
 
     /*
      * @Author wadreamer
-     * @Description //TODO 修改任务的测试状态
+     * @Description //TODO 修改任务状态为测试中 OK
      * @Date 18:06 2020/6/8
      * @Param [taskStatus]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
     @ResponseBody
-    @RequestMapping("updateStatus")
-    public AjaxResult updateTaskStatus(TaskStatus taskStatus) {
-        return taskStatusService.updateTaskStatus(taskStatus);
+    @RequestMapping("/testing")
+    public AjaxResult updateTaskStatusForTesting(TaskStatus taskStatus) {
+        if (taskStatus.getStatus() == null) {
+            return AjaxResult.error("操作失败，请稍后重试");
+        }
+        return taskStatusService.updateTaskStatusForTest(taskStatus, false);
     }
 
+    /*
+     * @Author wadreamer
+     * @Description //TODO 同步修改任务状态，测试通过  <--> 关闭 OK
+     * @Date 9:13 2020/6/9
+     * @Param [taskStatus]
+     * @return com.cfg.deploytools.common.domain.AjaxResult
+     **/
+    @ResponseBody
+    @RequestMapping("/pass")
+    public AjaxResult updateTaskStatusForPass(TaskStatus taskStatus) {
+        if (taskStatus.getStatus() == null) {
+            return AjaxResult.error("操作失败，请稍后重试");
+        }
+        return taskStatusService.updateTaskStatusForTest(taskStatus, true);
+    }
+
+    /*
+     * @Author wadreamer
+     * @Description //TODO 驳回任务 OK
+     * @Date 15:17 2020/6/9
+     * @Param [taskStatus]
+     * @return com.cfg.deploytools.common.domain.AjaxResult
+     **/
+    @ResponseBody
+    @RequestMapping("/reject")
+    public AjaxResult rejectTask(TaskStatus taskStatus) {
+        return taskStatusService.updateTaskStatusFoeReject(taskStatus);
+    }
 
 }
