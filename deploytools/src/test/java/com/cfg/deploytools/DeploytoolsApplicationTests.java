@@ -7,6 +7,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 class DeploytoolsApplicationTests {
 
     @Test
+    void login() {
+
+    }
+
+
+    @Test
     void contextLoads() {
     }
 
