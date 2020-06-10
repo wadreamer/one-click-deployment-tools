@@ -21,7 +21,7 @@ public class File implements Serializable {
 
     private String fullPath; // 文件全路径
 
-    private byte[] fileData; // 代码二进制文件
+    private String fileData; // 代码二进制文件
 
     private String sqlData; // SQL内容
 
@@ -46,11 +46,11 @@ public class File implements Serializable {
         this.fullPath = fullPath;
     }
 
-    public byte[] getFileData() {
+    public String getFileData() {
         return fileData;
     }
 
-    public void setFileData(byte[] fileData) {
+    public void setFileData(String fileData) {
         this.fileData = fileData;
     }
 

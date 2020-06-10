@@ -1,5 +1,11 @@
 package com.cfg.deploytools.mapper;
 
+import com.cfg.deploytools.model.File;
+import com.cfg.deploytools.model.TaskFile;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
 /**
  * ClassName: FileMapper
  * Description: TODO 上传文件
@@ -10,6 +16,15 @@ package com.cfg.deploytools.mapper;
  */
 public interface FileMapper {
 
-    
+    int deleteFileByFileIdArray(@Param("taskFiles") List<TaskFile> taskFiles);
 
+    File queryFileNewestByFullPath(TaskFile taskFile);
+
+    List<File> queryCurrentAllFileByTaskId(int taskId);
+
+    List<File> queryFileHistoryByFullPath(int fileId);
+
+    int insertSelectiveFile(File file);
+
+    File queryFileContent(TaskFile taskFile);
 }

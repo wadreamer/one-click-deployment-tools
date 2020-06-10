@@ -13,13 +13,11 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface TaskStatusMapper {
 
-    /*
-     * @Author wadreamer
-     * @Description //TODO 根据任务主键，更新任务状态
-     * @Date 10:10 2020/6/8
-     * @Param [taskId, status]
-     * @return int 表示受影响的数据库记录数
-     **/
-    int updateTaskStatusByTaskId(TaskStatus taskStatus);
+    int updateTaskStatusForTesting(TaskStatus taskStatus);
 
+    int updateTaskStatusForPass(@Param("taskStatus") TaskStatus taskStatus, @Param("account") String account);
+
+    int updateTaskStatusForReject(TaskStatus taskStatus);
+
+    int deleteTaskStatusForReject(@Param("taskId") int taskId);
 }

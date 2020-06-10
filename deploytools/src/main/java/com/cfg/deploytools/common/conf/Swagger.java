@@ -18,7 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author CFG
  * @since JDK 1.8
  */
-@Configuration(value = "false")
+@Configuration
 @EnableSwagger2
 public class Swagger {
 

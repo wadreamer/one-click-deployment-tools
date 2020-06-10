@@ -4,10 +4,31 @@
     <resultMap id="BaseResultMap" type="com.cfg.deploytools.model.TaskStatus">
     </resultMap>
 
-    <update id="updateTaskStatusByTaskId" parameterType="com.cfg.deploytools.model.TaskStatus">
+    <update id="updateTaskStatusForTesting" parameterType="com.cfg.deploytools.model.TaskStatus">
         update cfg_taskstatus
         set status = #{status}
         where task_id = #{taskId}
     </update>
+
+    <update id="updateTaskStatusForPass">
+        update cfg_taskstatus ts, zt_task t
+        set ts.status = #{taskStatus.status}, t.status = 'closed', t.closedby = #{account}, t.closedDate = now()
+        where ts.task_id = #{taskStatus.taskId} and t.id = #{taskStatus.taskId}
+    </update>
+
+    <update id="updateTaskStatusForReject" parameterType="com.cfg.deploytools.model.TaskStatus">
+        update zt_task t, (select finishedBy from zt_task where id = #{taskId}) r
+        set t.status = #{status},
+        t.assignedTo = r.finishedBy,
+        t.assignedDate = now(),
+        t.finishedBy = '',
+        t.finishedDate = now()
+        where t.id = #{taskId}
+    </update>
+
+    <delete id="deleteTaskStatusForReject" parameterType="Integer">
+        delete from cfg_taskstatus
+        where task_id = #{taskId}
+    </delete>
 
 </mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cfg.deploytools.mapper.FileMapper">
+
+    <resultMap id="BaseResultMap" type="com.cfg.deploytools.model.File">
+        <id column="file_id" property="fileId" jdbcType="INTEGER"/>
+        <result column="full_path" property="fullPath" jdbcType="VARCHAR"/>
+        <result column="file_data" property="fileData" jdbcType="BLOB"/>
+        <result column="sql_data" property="sqlData" jdbcType="LONGVARCHAR"/>
+        <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <delete id="deleteFileByFileIdArray">
+        delete from cfg_file
+        where file_id
+        in
+        <foreach collection="taskFiles" open="(" close=")" item="item" separator=",">
+            #{item.fileId}
+        </foreach>
+    </delete>
+
+    <select id="queryFileNewestByFullPath" resultMap="BaseResultMap" parameterType="com.cfg.deploytools.model.TaskFile">
+        SELECT a.file_id, a.full_path, a.file_data, a.sql_data, a.upload_time, a.type
+        FROM cfg_file a
+        WHERE a.full_path = #{fullPath} and NOT EXISTS
+        (SELECT 1 FROM (select * from cfg_file order by upload_time desc) b
+        WHERE b.upload_time > a.upload_time and
+        b.full_path = #{fullPath}
+        )
+    </select>
+
+    <select id="queryCurrentAllFileByTaskId" parameterType="Integer" resultMap="BaseResultMap">
+        select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type
+        from cfg_file f
+        where f.file_id in (
+        SELECT file_id from cfg_taskfile where task_id = #{taskId}
+        )
+    </select>
+
+    <select id="queryFileHistoryByFullPath" parameterType="Integer" resultMap="BaseResultMap">
+        select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type
+        from cfg_file f
+        where f.full_path in
+        (select full_path from cfg_file where file_id = #{fileId})
+        ORDER BY f.upload_time desc
+    </select>
+
+    <insert id="insertSelectiveFile" parameterType="com.cfg.deploytools.model.File" useGeneratedKeys="true">
+        insert into cfg_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fullPath != null">
+                full_path,
+            </if>
+            <if test="fileData != null">
+                file_data,
+            </if>
+            <if test="sqlData != null">
+                sql_data,
+            </if>
+                upload_time,
+            <if test="type != null">
+                type
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fullPath != null">
+                #{fullPath,jdbcType=VARCHAR},
+            </if>
+            <if test="fileData != null">
+                #{fileData,jdbcType=VARCHAR},
+            </if>
+            <if test="sqlData != null">
+                #{sqlData,jdbcType=VARCHAR},
+            </if>
+                now(),
+            <if test="type != null">
+                #{type,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </insert>
+
+    <select id="queryFileContent" parameterType="com.cfg.deploytools.model.TaskFile" resultMap="BaseResultMap">
+        select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type
+        from cfg_file f
+        where f.file_id = #{fileId}
+    </select>
+
+</mapper>

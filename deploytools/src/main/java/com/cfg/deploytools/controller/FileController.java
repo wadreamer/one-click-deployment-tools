@@ -1,14 +1,21 @@
 package com.cfg.deploytools.controller;
 
 import com.cfg.deploytools.common.domain.AjaxResult;
+import com.cfg.deploytools.model.File;
+import com.cfg.deploytools.model.TaskFile;
 import com.cfg.deploytools.service.FileService;
-import com.sun.org.apache.xpath.internal.operations.Mult;
+import com.cfg.deploytools.utils.FileUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * ClassName: FileController
@@ -18,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author CFG
  * @since JDK 1.8
  */
+@Api("文件相关")
 @RequestMapping("/cfg_dt/file")
 @Controller
 public class FileController {
@@ -32,19 +40,14 @@ public class FileController {
      * @Param [files]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
+    @ApiOperation(value = "上传文件", notes = "上传文件")
     @ResponseBody
     @PostMapping("/upload")
-    public AjaxResult fileUpload(MultipartFile[] files) {
-        boolean flag = true;
-        try {
-            for (MultipartFile file : files) {
-
-            }
-            return flag ? AjaxResult.success(200, "上传成功") : AjaxResult.error("上传失败");
-        } catch (Exception e) {
-            return AjaxResult.error(e.getMessage());
+    public AjaxResult fileUpload(MultipartFile file, String fullPath) {
+        if (!file.isEmpty()) {
+            return fileService.upload(file, fullPath);
         }
-
+        return AjaxResult.error("上传失败，请稍后重试");
     }
 
     /*
@@ -54,11 +57,34 @@ public class FileController {
      * @Param [fileId]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
+    @ApiOperation(value = "文件下载，即部署", notes = "文件下载，即部署")
     @ResponseBody
     @PostMapping("/download/{fileId}")
     public AjaxResult fileDownload(String fileId) {
 
         return null;
+    }
+
+    /*
+     * @Author wadreamer
+     * @Description //TODO 查看某个文件的历史版本
+     * @Date 8:45 2020/6/10
+     * @Param [fileId]
+     * @return com.cfg.deploytools.common.domain.AjaxResult
+     **/
+    @ApiOperation(value = "获取某个文件的所有历史版本", notes = "获取某个文件的所有历史版本")
+    @ResponseBody
+    @RequestMapping("/history/{fileId}")
+    public AjaxResult fileHistory(@PathVariable("fileId") String fileId) {
+        List<File> list = fileService.getFileHistory(Integer.parseInt(fileId));
+        return list != null ? AjaxResult.success(200, list) : AjaxResult.error("操作失败，请稍后重试");
+    }
+
+    @ApiOperation(value = "预览文件内容", notes = "预览文件内容")
+    @ResponseBody
+    @RequestMapping("/sqlpreview")
+    public AjaxResult SQLPreview(TaskFile taskFile) {
+        return fileService.getFileContent(taskFile);
     }
 
 }
