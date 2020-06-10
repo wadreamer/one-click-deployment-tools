@@ -4,6 +4,8 @@ import com.cfg.deploytools.common.domain.AjaxResult;
 import com.cfg.deploytools.model.File;
 import com.cfg.deploytools.service.FileService;
 import com.cfg.deploytools.utils.FileUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,7 @@ import java.util.List;
  * @author CFG
  * @since JDK 1.8
  */
+@Api("文件相关")
 @RequestMapping("/cfg_dt/file")
 @Controller
 public class FileController {
@@ -36,6 +39,7 @@ public class FileController {
      * @Param [files]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
+    @ApiOperation(value = "上传文件", notes = "上传文件")
     @ResponseBody
     @PostMapping("/upload")
     public AjaxResult fileUpload(MultipartFile file, String fullPath) {
@@ -52,6 +56,7 @@ public class FileController {
      * @Param [fileId]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
+    @ApiOperation(value = "文件下载，即部署", notes = "文件下载，即部署")
     @ResponseBody
     @PostMapping("/download/{fileId}")
     public AjaxResult fileDownload(String fileId) {
@@ -59,6 +64,14 @@ public class FileController {
         return null;
     }
 
+    /*
+     * @Author wadreamer
+     * @Description //TODO 查看某个文件的历史版本
+     * @Date 8:45 2020/6/10
+     * @Param [fileId]
+     * @return com.cfg.deploytools.common.domain.AjaxResult
+     **/
+    @ApiOperation(value = "获取某个文件的所有历史版本", notes = "获取某个文件的所有历史版本")
     @ResponseBody
     @RequestMapping("/history/{fileId}")
     public AjaxResult fileHistory(@PathVariable("fileId") String fileId) {

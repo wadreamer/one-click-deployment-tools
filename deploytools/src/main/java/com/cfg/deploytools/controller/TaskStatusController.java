@@ -5,6 +5,7 @@ import com.cfg.deploytools.mapper.TaskStatusMapper;
 import com.cfg.deploytools.model.TaskStatus;
 import com.cfg.deploytools.service.TaskStatusService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author CFG
  * @since JDK 1.8
  */
-@Api(value = "任务状态")
+@Api(value = "任务状态相关")
 @RequestMapping("/cfg_dt/task_status")
 @Controller
 public class TaskStatusController {
@@ -33,6 +34,7 @@ public class TaskStatusController {
      * @Param [taskStatus]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
+    @ApiOperation(value = "将任务状态从 待测试 --> 测试中", notes = "将任务状态从 待测试 --> 测试中")
     @ResponseBody
     @RequestMapping("/testing")
     public AjaxResult updateTaskStatusForTesting(TaskStatus taskStatus) {
@@ -49,6 +51,8 @@ public class TaskStatusController {
      * @Param [taskStatus]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
+    @ApiOperation(value = "同步修改任务状态， 禅道 已完成 --> 已关闭， 新建的表 测试中 --> 测试通过",
+            notes = "同步修改任务状态， 禅道 已完成 --> 已关闭， 新建的表 测试中 --> 测试通过")
     @ResponseBody
     @RequestMapping("/pass")
     public AjaxResult updateTaskStatusForPass(TaskStatus taskStatus) {
@@ -65,6 +69,7 @@ public class TaskStatusController {
      * @Param [taskStatus]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
+    @ApiOperation(value = "驳回任务，禅道 已完成 --> 进行中，新建的表 删除cfg_taskstatus cfg_file cfg_taskfile 相关数据")
     @ResponseBody
     @RequestMapping("/reject")
     public AjaxResult rejectTask(TaskStatus taskStatus) {

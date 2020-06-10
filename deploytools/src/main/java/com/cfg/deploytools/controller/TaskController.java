@@ -5,6 +5,8 @@ import com.cfg.deploytools.model.File;
 import com.cfg.deploytools.model.TableParse;
 import com.cfg.deploytools.service.FileService;
 import com.cfg.deploytools.service.TaskService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,7 @@ import java.util.List;
  * @author CFG
  * @since JDK 1.8
  */
+@Api("任务相关")
 @RequestMapping("/cfg_dt/task")
 @Controller
 public class TaskController {
@@ -39,6 +42,7 @@ public class TaskController {
      * @Param [taskId]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
+    @ApiOperation(value = "获取当前任务正在使用的所有文件",notes = "获取当前任务正在使用的所有文件")
     @ResponseBody
     @RequestMapping("/{taskId}")
     public AjaxResult getTaskCurrentFile(@PathVariable("taskId") String taskId) {
@@ -54,6 +58,7 @@ public class TaskController {
      * @Param [tableParse, projectId]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
+    @ApiOperation(value = "获取某个项目工程下的所有任务", notes = "获取某个项目工程下的所有任务")
     @ResponseBody
     @RequestMapping("/list/{projectId}")
     public AjaxResult getTaskList(TableParse tableParse, @PathVariable("projectId") String projectId) {

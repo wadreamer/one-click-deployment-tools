@@ -50,6 +50,8 @@ public class ShiroFilterMapFactory {
 
         //开放APicontroller
         filterChainDefinitionMap.put("/ApiController/**", "anon");
+        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
+
 
         //对所有页面进行认证
         // filterChainDefinitionMap.put("/**","authc");
