@@ -2,11 +2,14 @@ package com.cfg.deploytools.controller;
 
 import com.cfg.deploytools.common.domain.AjaxResult;
 import com.cfg.deploytools.model.User;
+import com.cfg.deploytools.utils.MD5Util;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,8 +36,10 @@ public class LoginController {
         System.out.println(user);
         //获取当前用户
         Subject subject = SecurityUtils.getSubject();
+        //将前端密码转为MD5
+        String MD5_PassWord = MD5Util.encode(user.getPassword());
         //封装用户的登入数据
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getAccount(), user.getPassword());
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getAccount(), MD5_PassWord);
         try{
             subject.login(token);
             return AjaxResult.success(200,"登入成功");

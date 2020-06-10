@@ -1,5 +1,6 @@
 package com.cfg.deploytools.shiro.config;
 import com.cfg.deploytools.shiro.service.UserRealm;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Qualifier;

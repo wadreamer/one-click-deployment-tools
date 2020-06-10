@@ -2,6 +2,7 @@ package com.cfg.deploytools.shiro.service;
 
 import com.cfg.deploytools.model.User;
 import com.cfg.deploytools.service.UserService;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -34,6 +35,11 @@ public class UserRealm extends AuthorizingRealm {
             return null;    //抛出异常UnknownAccountException
         }
         //密码验证shiro自己做
-        return new SimpleAuthenticationInfo("",user.getPassword(),"");
+        return new SimpleAuthenticationInfo(user,user.getPassword(),"");
+    }
+
+    //
+    public void clearCachedAuthorizationInfo(){
+        this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
     }
 }
