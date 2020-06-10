@@ -26,6 +26,13 @@ public class FileService {
     @Autowired
     private FileMapper fileMapper;
 
+    /*
+     * @Author wadreamer
+     * @Description //TODO 文件上传
+     * @Date 9:23 2020/6/10
+     * @Param [file, fullPath]
+     * @return com.cfg.deploytools.common.domain.AjaxResult
+     **/
     public AjaxResult upload(MultipartFile file, String fullPath) {
         File f = null;
         try {
@@ -109,6 +116,11 @@ public class FileService {
      **/
     public List<File> getFileHistory(int fileId) {
         return fileMapper.queryFileHistoryByFullPath(fileId);
+    }
+
+    public AjaxResult getFileContent(TaskFile taskFile){
+        File file = fileMapper.queryFileContent(taskFile);
+        return file != null ? AjaxResult.success(200,file) : AjaxResult.error("操作失败，请稍后重试");
     }
 
 }

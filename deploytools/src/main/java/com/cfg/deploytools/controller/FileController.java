@@ -2,6 +2,7 @@ package com.cfg.deploytools.controller;
 
 import com.cfg.deploytools.common.domain.AjaxResult;
 import com.cfg.deploytools.model.File;
+import com.cfg.deploytools.model.TaskFile;
 import com.cfg.deploytools.service.FileService;
 import com.cfg.deploytools.utils.FileUtils;
 import io.swagger.annotations.Api;
@@ -79,8 +80,11 @@ public class FileController {
         return list != null ? AjaxResult.success(200, list) : AjaxResult.error("操作失败，请稍后重试");
     }
 
-    // @ResponseBody
-    // @RequestMapping("/sqlpreview")
-    // public AjaxResult SQLPreview(String taskId,String fileId){}
+    @ApiOperation(value = "预览文件内容", notes = "预览文件内容")
+    @ResponseBody
+    @RequestMapping("/sqlpreview")
+    public AjaxResult SQLPreview(TaskFile taskFile) {
+        return fileService.getFileContent(taskFile);
+    }
 
 }

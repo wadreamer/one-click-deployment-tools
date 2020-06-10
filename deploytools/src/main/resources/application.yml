@@ -22,8 +22,8 @@ spring:
   devtools: # 启动热部署
     restart:
       enabled: true
-  mvc: # 静态资源文件的路径
-    static-path-pattern: /static/**
+#  mvc: # 静态资源文件的路径
+#    static-path-pattern: /static/**
   thymeleaf: # thymeleaf 模板引擎的基本配置
     mode: HTML5
     prefix: classpath:/templates/

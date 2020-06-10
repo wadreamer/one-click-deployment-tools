@@ -25,4 +25,6 @@ public interface FileMapper {
     List<File> queryFileHistoryByFullPath(int fileId);
 
     int insertSelectiveFile(File file);
+
+    File queryFileContent(TaskFile taskFile);
 }
