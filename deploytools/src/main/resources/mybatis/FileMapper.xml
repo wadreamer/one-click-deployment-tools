@@ -106,7 +106,7 @@
     </select>
 
     <select id="queryFileById" parameterType="int" resultMap="BaseResultMap">
-        select f.full_path, f.file_data
+        select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type
         from cfg_file f
         where f.file_id = #{fileId}
     </select>
