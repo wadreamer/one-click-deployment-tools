@@ -28,7 +28,7 @@ public class File implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp uploadTime; // 文件提交时间
 
-    private Integer type; // 文件类型 0表示文件 1表示SQL内容
+    private String type; // 文件类型 0表示文件 1表示SQL内容
 
     public Integer getFileId() {
         return fileId;
@@ -70,11 +70,11 @@ public class File implements Serializable {
         this.uploadTime = updateTime;
     }
 
-    public Integer getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(String type) {
         this.type = type;
     }
 }

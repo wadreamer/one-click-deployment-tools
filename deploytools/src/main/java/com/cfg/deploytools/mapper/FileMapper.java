@@ -27,4 +27,8 @@ public interface FileMapper {
     int insertSelectiveFile(File file);
 
     File queryFileContent(TaskFile taskFile);
+
+    List<File> checkConflictWithTime(@Param("fullPath") String fullPath, @Param("taskId") int taskId);
+
+    List<File> checkConflictWithTaskStatus(@Param("fullPath") String fullPath);
 }

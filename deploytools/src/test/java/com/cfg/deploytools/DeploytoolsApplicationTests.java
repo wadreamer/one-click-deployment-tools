@@ -8,6 +8,8 @@ class DeploytoolsApplicationTests {
 
     @Test
     void contextLoads() {
+        String name = "proc_dasdas()";
+        System.out.println(name.substring(0,name.indexOf("_")).toLowerCase());
     }
 
 }
