@@ -44,7 +44,7 @@ public class FileController {
     @PostMapping("/upload")
     public AjaxResult fileUpload(MultipartFile file,String content, String fullPath, String taskId,boolean flag) {
         // 存储过程的前缀名 proc_
-        String firstName = fullPath.substring(0, fullPath.indexOf("_")).toLowerCase();
+        String firstName = fullPath.indexOf("_") != -1? fullPath.substring(0, fullPath.indexOf("_")).toLowerCase() : "";
         if (!file.isEmpty()) {
             if((fileService.checkConflict(fullPath,Integer.parseInt(taskId)) || firstName.equals("proc")) && !flag){
                 return AjaxResult.error("上传的文件：" + fullPath + "存在冲突，是否继续上传");

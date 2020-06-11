@@ -88,20 +88,20 @@
     
     <select id="checkConflictWithTime" resultMap="BaseResultMap">
         select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type,
-        tf.task_id, realStartedTime (select realStarted from zt_task where t.id = #{taskId})
+        tf.task_id
         from cfg_file f, cfg_taskfile tf, zt_task t
         where tf.full_path = #{fullPath} and
         tf.task_id = t.id and
         t.status = 'closed' and
-        t.closedDate > realStartedTime
+        t.closedDate > (select realStarted from zt_task where id = #{taskId})
     </select>
 
     <select id="checkConflictWithTaskStatus" parameterType="String" resultMap="BaseResultMap">
         select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type,
         tf.task_id
-        from cfg_file f, cfg_taskfile tf
+        from cfg_file f, cfg_taskfile tf, zt_task t
         where tf.full_path = #{fullPath} and
         tf.task_id = t.id and
-        tf.status = 'done'
+        t.status = 'done'
     </select>
 </mapper>
