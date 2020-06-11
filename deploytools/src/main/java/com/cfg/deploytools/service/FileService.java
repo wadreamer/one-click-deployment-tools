@@ -153,4 +153,9 @@ public class FileService {
         }
     }
 
+
+    public File getFileById(int fileId){
+        return fileMapper.queryFileById(fileId);
+    }
+
 }

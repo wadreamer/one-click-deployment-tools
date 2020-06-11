@@ -104,4 +104,11 @@
         tf.task_id = t.id and
         tf.status = 'done'
     </select>
+
+    <select id="queryFileById" parameterType="int" resultType="File">
+        select f.full_path, f.file_data
+        from cfg_file f
+        where f.file_id = #{fileId}
+    </select>
+
 </mapper>
