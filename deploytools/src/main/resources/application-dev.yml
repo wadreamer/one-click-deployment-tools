@@ -10,9 +10,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       master:
-        url: jdbc:mysql://192.168.137.129:3306/candao?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=UTC
+        url: jdbc:mysql://localhost:3306/test_dt?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=UTC
         username: root
-        password: woshimima
+        password: root
       salve:
         enabled: false
         url: jdbc:mysql://192.168.137.129:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=UTC

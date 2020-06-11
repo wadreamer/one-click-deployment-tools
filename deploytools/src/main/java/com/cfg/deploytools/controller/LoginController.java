@@ -26,10 +26,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @since JDK 1.8
  */
 
-@CrossOrigin//跨域问题
+// @CrossOrigin//跨域问题
 @RequestMapping("/cfg_dt")
 @Controller
 public class LoginController {
+
     @RequestMapping("/login")
     @ResponseBody
     public AjaxResult login(User user){

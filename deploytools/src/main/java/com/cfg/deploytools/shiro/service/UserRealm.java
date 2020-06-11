@@ -9,12 +9,11 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class UserRealm extends AuthorizingRealm {
 
+public class UserRealm extends AuthorizingRealm {
 
     @Autowired
     private UserService userService;
-
 
     //授权
     @Override

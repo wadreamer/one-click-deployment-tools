@@ -8,19 +8,22 @@ import org.springframework.stereotype.Service;
 /**
  * ClassName: UserService
  * Description:
- * date: 2020/6/8 9:23
+ * date: 2020/6/11 13:55
  *
  * @author CFG
  * @since JDK 1.8
  */
 @Service
 public class UserService {
-
     @Autowired
     private UserMapper userMapper;
 
-    public User queryUserByAccount(String account){
+    public User queryUserByAccount(String account) {
         User user = userMapper.queryUserByAccount(account);
         return user;
     }
+
 }
+
+
+
