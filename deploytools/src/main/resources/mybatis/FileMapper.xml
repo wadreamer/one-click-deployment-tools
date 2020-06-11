@@ -8,7 +8,7 @@
         <result column="file_data" property="fileData" jdbcType="BLOB"/>
         <result column="sql_data" property="sqlData" jdbcType="LONGVARCHAR"/>
         <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP"/>
-        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
     </resultMap>
 
     <delete id="deleteFileByFileIdArray">
@@ -85,5 +85,23 @@
         from cfg_file f
         where f.file_id = #{fileId}
     </select>
+    
+    <select id="checkConflictWithTime" resultMap="BaseResultMap">
+        select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type,
+        tf.task_id, realStartedTime (select realStarted from zt_task where t.id = #{taskId})
+        from cfg_file f, cfg_taskfile tf, zt_task t
+        where tf.full_path = #{fullPath} and
+        tf.task_id = t.id and
+        t.status = 'closed' and
+        t.closedDate > realStartedTime
+    </select>
 
+    <select id="checkConflictWithTaskStatus" parameterType="String" resultMap="BaseResultMap">
+        select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type,
+        tf.task_id
+        from cfg_file f, cfg_taskfile tf
+        where tf.full_path = #{fullPath} and
+        tf.task_id = t.id and
+        tf.status = 'done'
+    </select>
 </mapper>

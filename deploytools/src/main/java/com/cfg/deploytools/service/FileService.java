@@ -33,23 +33,30 @@ public class FileService {
      * @Param [file, fullPath]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
-    public AjaxResult upload(MultipartFile file, String fullPath) {
+    public AjaxResult upload(Object file, String fullPath) {
         File f = null;
+        String content = "";
         try {
             // 读取文件内容
-            String content = FileUtils.readFileByChars(file.getInputStream());
+            if (file instanceof String) {
+                content = (String) file;
+            } else {
+                content = FileUtils.readFileByChars(((MultipartFile) file).getInputStream());
+            }
+            // 自定义的 File 类
             f = new File();
             // 设置文件全路径
             f.setFullPath(fullPath);
             // 获取文件后缀名
             String suffixName = fullPath.substring(fullPath.lastIndexOf(".")).toLowerCase();
+
             // 判断文件类型
             if (suffixName.equals(".sql")) {
                 f.setSqlData(content);
-                f.setType(1);
+                f.setType("sql");
             } else {
                 f.setFileData(content);
-                f.setType(0);
+                f.setType("file");
             }
         } catch (Exception e) {
             return AjaxResult.error(e.getMessage());
@@ -118,9 +125,32 @@ public class FileService {
         return fileMapper.queryFileHistoryByFullPath(fileId);
     }
 
-    public AjaxResult getFileContent(TaskFile taskFile){
+    /*
+     * @Author wadreamer
+     * @Description //TODO 获取文件内容 ok
+     * @Date 10:25 2020/6/11
+     * @Param [taskFile]
+     * @return com.cfg.deploytools.common.domain.AjaxResult
+     **/
+    public AjaxResult getFileContent(TaskFile taskFile) {
         File file = fileMapper.queryFileContent(taskFile);
-        return file != null ? AjaxResult.success(200,file) : AjaxResult.error("操作失败，请稍后重试");
+        return file != null ? AjaxResult.success(200, file) : AjaxResult.error("操作失败，请稍后重试");
+    }
+
+    /*
+     * @Author wadreamer
+     * @Description //TODO 根据 文件全路径 或 任务主键 判断上传的文件是否存在冲突 ok
+     * @Date 10:23 2020/6/11
+     * @Param [fullPath, taskId]
+     * @return boolean
+     **/
+    public boolean checkConflict(String fullPath, int taskId) {
+        if (fileMapper.checkConflictWithTime(fullPath, taskId).size() > 0 ||
+                fileMapper.checkConflictWithTaskStatus(fullPath).size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
