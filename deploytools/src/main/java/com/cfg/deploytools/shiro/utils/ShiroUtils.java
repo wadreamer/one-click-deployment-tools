@@ -1,7 +1,7 @@
 package com.cfg.deploytools.shiro.utils;
 
-import com.cfg.deploytools.shiro.service.MyShiroRealm;
 import com.cfg.deploytools.model.User;
+import com.cfg.deploytools.shiro.service.UserRealm;
 import com.cfg.deploytools.utils.BeanUtils;
 import com.cfg.deploytools.utils.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -98,7 +98,7 @@ public class ShiroUtils {
      */
     public static void clearCachedAuthorizationInfo() {
         RealmSecurityManager rsm = (RealmSecurityManager) SecurityUtils.getSecurityManager();
-        MyShiroRealm realm = (MyShiroRealm) rsm.getRealms().iterator().next();
+        UserRealm realm = (UserRealm) rsm.getRealms().iterator().next();
         realm.clearCachedAuthorizationInfo();
     }
 

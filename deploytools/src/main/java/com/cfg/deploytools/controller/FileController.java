@@ -99,4 +99,11 @@ public class FileController {
         return fileService.getFileContent(taskFile);
     }
 
+
+    @RequestMapping("/deployFile")
+    @ResponseBody
+    public AjaxResult deployFile(int fileId){
+        File deployFile = fileService.getFileById(fileId);
+        return deployFile.getFileData() != null ? AjaxResult.success(200, deployFile) : AjaxResult.error("操作失败，请稍后重试");
+    }
 }

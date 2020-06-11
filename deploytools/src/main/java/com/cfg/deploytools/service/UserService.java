@@ -1,6 +1,7 @@
 package com.cfg.deploytools.service;
 
 import com.cfg.deploytools.mapper.UserMapper;
+import com.cfg.deploytools.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +19,8 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-
+    public User queryUserByAccount(String account){
+        User user = userMapper.queryUserByAccount(account);
+        return user;
+    }
 }
