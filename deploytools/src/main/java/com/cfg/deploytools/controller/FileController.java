@@ -42,15 +42,15 @@ public class FileController {
     @ApiOperation(value = "上传文件", notes = "上传文件")
     @ResponseBody
     @PostMapping("/upload")
-    public AjaxResult fileUpload(MultipartFile file,String content, String fullPath, String taskId,boolean flag) {
+    public AjaxResult fileUpload(MultipartFile file, String content, String fullPath, String taskId, boolean flag) {
         // 存储过程的前缀名 proc_
-        String firstName = fullPath.indexOf("_") != -1? fullPath.substring(0, fullPath.indexOf("_")).toLowerCase() : "";
+        String firstName = fullPath.indexOf("_") != -1 ? fullPath.substring(0, fullPath.indexOf("_")).toLowerCase() : "";
         if (!file.isEmpty()) {
-            if((fileService.checkConflict(fullPath,Integer.parseInt(taskId)) || firstName.equals("proc")) && !flag){
+            if ((fileService.checkConflict(fullPath, Integer.parseInt(taskId)) || firstName.equals("proc")) && !flag) {
                 return AjaxResult.error("上传的文件：" + fullPath + "存在冲突，是否继续上传");
             }
             return fileService.upload(file, fullPath);
-        }else{
+        } else {
             return fileService.upload(content, fullPath);
         }
     }
@@ -102,7 +102,7 @@ public class FileController {
 
     @RequestMapping("/deployFile")
     @ResponseBody
-    public AjaxResult deployFile(int fileId){
+    public AjaxResult deployFile(int fileId) {
         File deployFile = fileService.getFileById(fileId);
         return deployFile.getFileData() != null ? AjaxResult.success(200, deployFile) : AjaxResult.error("操作失败，请稍后重试");
     }
