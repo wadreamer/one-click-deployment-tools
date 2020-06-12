@@ -153,9 +153,27 @@ public class FileService {
         }
     }
 
-
+    /**
+     * 根据ID查找文件
+     * @param fileId
+     * @return
+     */
     public File getFileById(int fileId){
         return fileMapper.queryFileById(fileId);
     }
 
+    /**
+     * 根据任务ID查找文件列表
+     * @param taskId
+     * @return
+     */
+    public List<File> getFilesByTaskID(Integer taskId) {
+        List<File> fileList = new ArrayList<>();
+        List<Integer> filesID = fileMapper.queryFilesIdByTaskId(taskId);
+        for (int i = 0; i < filesID.size(); i++) {
+            File file = fileMapper.queryFileById(filesID.get(i));
+            fileList.add(file);
+        }
+        return fileList;
+    }
 }

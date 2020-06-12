@@ -1,10 +1,14 @@
 package com.cfg.deploytools.service;
 
+import com.cfg.deploytools.common.domain.AjaxResult;
 import com.cfg.deploytools.mapper.TaskFileMapper;
+import com.cfg.deploytools.model.File;
 import com.cfg.deploytools.model.TaskFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -21,6 +25,9 @@ public class TaskFileService {
 
     @Autowired
     private TaskFileMapper taskFileMapper;
+
+    @Autowired
+    private FileService fileService;
 
     /*
      * @Author wadreamer
@@ -42,5 +49,4 @@ public class TaskFileService {
     public int deleteTaskFile(List<TaskFile> taskFile){
         return taskFileMapper.deleteTaskFile(taskFile);
     }
-
 }

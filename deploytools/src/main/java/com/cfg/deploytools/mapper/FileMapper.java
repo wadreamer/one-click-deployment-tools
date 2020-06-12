@@ -33,4 +33,6 @@ public interface FileMapper {
     List<File> checkConflictWithTaskStatus(@Param("fullPath") String fullPath);
 
     File queryFileById(int fileId);
+
+    List<Integer> queryFilesIdByTaskId(Integer taskId);
 }

@@ -63,5 +63,16 @@ public class TaskController {
         return taskService.getTaskListByProjectId(tableParse, Integer.parseInt(projectId));
     }
 
+    /**
+     * 根据taskID查找file
+     * @param taskId
+     * @return 文件列表
+     */
+    @RequestMapping("/deployTask")
+    @ResponseBody
+    public AjaxResult deployTask(Integer taskId) {
+        List<File> files = fileService.getFilesByTaskID(taskId);
+        return AjaxResult.success(200,files);
+    }
 
 }

@@ -111,4 +111,9 @@
         where f.file_id = #{fileId}
     </select>
 
+    <select id="queryFilesIdByTaskId" resultType="Integer" parameterType="Integer">
+        select tf.file_id
+        from cfg_taskfile tf
+        where tf.task_id = #{taskId}
+    </select>
 </mapper>

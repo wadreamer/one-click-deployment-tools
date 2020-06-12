@@ -8,10 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -24,6 +21,7 @@ import java.util.List;
  * @author CFG
  * @since JDK 1.8
  */
+@CrossOrigin//跨域问题
 @Api("文件相关")
 @RequestMapping("/cfg_dt/file")
 @Controller
@@ -100,10 +98,15 @@ public class FileController {
     }
 
 
+    /**
+     * 根据ID查找文件
+     * @param fileId
+     * @return
+     */
     @RequestMapping("/deployFile")
     @ResponseBody
     public AjaxResult deployFile(int fileId){
         File deployFile = fileService.getFileById(fileId);
-        return deployFile.getFileData() != null ? AjaxResult.success(200, deployFile) : AjaxResult.error("操作失败，请稍后重试");
+        return deployFile != null ? AjaxResult.success(200, deployFile) : AjaxResult.error("操作失败，请稍后重试");
     }
 }
