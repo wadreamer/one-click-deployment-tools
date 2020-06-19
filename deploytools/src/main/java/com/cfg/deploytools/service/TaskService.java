@@ -36,6 +36,7 @@ public class TaskService {
         List<Task> taskList = taskMapper.getTaskListByProjectId(projectId);
         List<Task> taskList2 = taskMapper.getTaskListByProjectId2(projectId);
         taskList.addAll(taskList2);
+        System.out.println(taskList.size());
 
         if (taskList != null) {
             PageHelper.startPage(tableParse.getPageNum(), tableParse.getPageSize());

@@ -30,9 +30,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/cfg_dt")
 @Controller
 public class LoginController {
+
     @RequestMapping("/login")
     @ResponseBody
     public AjaxResult login(User user){
+        if(user.getAccount() == null || user.getPassword() == null || user == null){
+            return AjaxResult.error(500,"账号或密码不能为空");
+        }
+
         System.out.println(user);
         //获取当前用户
         Subject subject = SecurityUtils.getSubject();
