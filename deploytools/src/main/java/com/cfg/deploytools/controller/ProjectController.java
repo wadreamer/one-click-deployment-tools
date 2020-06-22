@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author CFG
  * @since JDK 1.8
  */
-@CrossOrigin//跨域问题
+// @CrossOrigin//跨域问题
 @Api("项目工程相关")
 @RequestMapping("/cfg_dt/project")
 @Controller

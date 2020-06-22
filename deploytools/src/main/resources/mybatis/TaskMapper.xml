@@ -11,21 +11,71 @@
         <result column="finishedBy" property="finishedBy" jdbcType="VARCHAR"/>
         <result column="finishedDate" property="finishedDate" jdbcType="TIMESTAMP"/>
     </resultMap>
-    
+
     <select id="getTaskListByProjectId" resultMap="BaseResultMap" parameterType="Integer">
-        select id, project, name, status, openedBy, openedDate, finishedBy, finishedDate
-        from zt_task
+        select t.id, t.project, t.name,
+        if(t.id = ts.task_id, ts.status, t.status) status,
+        t.openedBy, t.openedDate, t.finishedBy, t.finishedDate
+        from zt_task t, cfg_taskstatus ts
         where project = #{projectId}
-        and id not in (
-        select task_id from cfg_taskstatus
-        )
+        GROUP BY t.name
+        order by assignedDate desc
     </select>
 
-    <select id="getTaskListByProjectId2" resultMap="BaseResultMap" parameterType="Integer">
-        select t.id, t.project, t.name, t.openedBy, t.openedDate, t.finishedBy, t.finishedDate,
-        ts.status, ts.task_id, ts.project_id
-        from cfg_taskstatus ts, zt_task t
-        where t.project = ts.project_id and ts.project_id = #{projectId}
+    <select id="searchByCondition" resultMap="BaseResultMap">
+        select t.id, t.project, t.name,t.status, t.openedBy, t.openedDate, t.finishedBy, t.finishedDate, t.assignedDate
+        from zt_task t
+        where
+        <if test="status != null">
+            t.status = #{status} and
+        </if>
+        <if test="taskId > 0">
+            t.id = #{taskId} and
+        </if>
+        <if test="start != null">
+            t.finishedDate &gt;= #{start} and
+        </if>
+        <if test="end != null">
+            t.finishedDate &lt;= #{end} and
+        </if>
+        t.project = #{projectId} and
+        t.id not in (select ts.task_id from cfg_taskstatus ts)
+        union
+        select t.id, t.project, t.name, ts.status, t.openedBy, t.openedDate, t.finishedBy, t.finishedDate, t.assignedDate
+        from zt_task t, cfg_taskstatus ts
+        where
+        <if test="status != null">
+            ts.status = #{status} and
+        </if>
+        <if test="taskId > 0">
+            ts.task_id = #{taskId} and
+        </if>
+        <if test="start != null">
+            t.finishedDate &gt;= #{start} and
+        </if>
+        <if test="end != null">
+            t.finishedDate &lt;= #{end} and
+        </if>
+        ts.project_id = #{projectId} and t.id = ts.task_id
+        GROUP BY t.name
+        order by assignedDate desc
     </select>
+
+    <!--<select id="getTaskListByProjectId" resultMap="BaseResultMap" parameterType="Integer">-->
+    <!--    select id, project, name, status, openedBy, openedDate, finishedBy, finishedDate-->
+    <!--    from zt_task-->
+    <!--    where project = #{projectId}-->
+    <!--    and id not in (-->
+    <!--    select task_id from cfg_taskstatus-->
+    <!--    )-->
+    <!--    order by assignedDate desc-->
+    <!--</select>-->
+
+    <!--<select id="getTaskListByProjectId2" resultMap="BaseResultMap" parameterType="Integer">-->
+    <!--    select t.id, t.project, t.name, t.openedBy, t.openedDate, t.finishedBy, t.finishedDate,-->
+    <!--    ts.status, ts.task_id, ts.project_id-->
+    <!--    from cfg_taskstatus ts, zt_task t-->
+    <!--    where t.project = ts.project_id and ts.project_id = #{projectId} order by t.assignedDate desc-->
+    <!--</select>-->
 
 </mapper>

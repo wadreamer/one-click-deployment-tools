@@ -13,9 +13,9 @@ public class TableParse {
 
     private int pageSize;
 
-    private String orderByColumn;
-
-    private String isAsc;
+    // private String orderByColumn;
+    //
+    // private String isAsc;
 
     public int getPageNum() {
         return pageNum;
@@ -33,19 +33,19 @@ public class TableParse {
         this.pageSize = pageSize;
     }
 
-    public String getOrderByColumn() {
-        return orderByColumn;
-    }
-
-    public void setOrderByColumn(String orderByColumn) {
-        this.orderByColumn = orderByColumn;
-    }
-
-    public String getIsAsc() {
-        return isAsc;
-    }
-
-    public void setIsAsc(String isAsc) {
-        this.isAsc = isAsc;
-    }
+    // public String getOrderByColumn() {
+    //     return orderByColumn;
+    // }
+    //
+    // public void setOrderByColumn(String orderByColumn) {
+    //     this.orderByColumn = orderByColumn;
+    // }
+    //
+    // public String getIsAsc() {
+    //     return isAsc;
+    // }
+    //
+    // public void setIsAsc(String isAsc) {
+    //     this.isAsc = isAsc;
+    // }
 }

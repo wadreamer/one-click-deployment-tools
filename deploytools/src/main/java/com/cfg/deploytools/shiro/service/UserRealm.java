@@ -2,6 +2,7 @@ package com.cfg.deploytools.shiro.service;
 
 import com.cfg.deploytools.model.User;
 import com.cfg.deploytools.service.UserService;
+import com.google.gson.Gson;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -30,15 +31,19 @@ public class UserRealm extends AuthorizingRealm {
         UsernamePasswordToken userToken = (UsernamePasswordToken) token;
         //真实数据
         User user = userService.queryUserByAccount(userToken.getUsername());
-        if (user == null){
+        String password = new String((char[]) token.getCredentials());
+        if (user == null) {
+            System.out.println("In realm, user is null");
             return null;    //抛出异常UnknownAccountException
         }
+
+        System.out.println(new Gson().toJson(user));
         //密码验证shiro自己做
-        return new SimpleAuthenticationInfo(user,user.getPassword(),"");
+        return new SimpleAuthenticationInfo(user, user.getPassword(), getName());
     }
 
     //
-    public void clearCachedAuthorizationInfo(){
+    public void clearCachedAuthorizationInfo() {
         this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
     }
 }

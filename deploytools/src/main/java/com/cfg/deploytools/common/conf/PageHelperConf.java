@@ -1,6 +1,8 @@
 package com.cfg.deploytools.common.conf;
 
 import com.github.pagehelper.PageHelper;
+import org.apache.ibatis.plugin.Interceptor;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,15 +26,15 @@ public class PageHelperConf {
      * @Param []
      * @return com.github.pagehelper.PageHelper
      **/
-    @Bean
-    public PageHelper pageHelper() {
-        PageHelper pageHelper = new PageHelper();
-        Properties properties = new Properties();
-        properties.setProperty("offsetAsPageNum", "true");
-        properties.setProperty("rowBoundsWithCount", "true");
-        properties.setProperty("reasonable", "true");
-        properties.setProperty("dialect", "mysql");    //配置mysql数据库的方言
-        pageHelper.setProperties(properties);
-        return pageHelper;
-    }
+    // @Bean
+    // public PageHelper pageHelper() {
+    //     PageHelper pageHelper = new PageHelper();
+    //     Properties properties = new Properties();
+    //     properties.setProperty("offsetAsPageNum", "true");
+    //     properties.setProperty("rowBoundsWithCount", "true");
+    //     properties.setProperty("reasonable", "true");
+    //     properties.setProperty("dialect", "mysql");    //配置mysql数据库的方言
+    //     pageHelper.setProperties(properties);
+    //     return pageHelper;
+    // }
 }

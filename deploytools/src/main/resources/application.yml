@@ -34,11 +34,11 @@ spring:
     time-zone: GMT+8
     date-format: yyyy-mm-dd HH:mm:ss
 
-pagehelper: # 分页器配置
-  dialect: mysql
-  reasonable: true
-  support-methods-arguments: true
-  params: count=countSql
+pagehelper:
+  helper-dialect: mysql
+#  reasonable: true
+#  support-methods-arguments: true
+#  params: count=countsql
 
 logging:
   level:

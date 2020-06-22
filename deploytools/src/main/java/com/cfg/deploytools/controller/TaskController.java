@@ -5,12 +5,14 @@ import com.cfg.deploytools.model.File;
 import com.cfg.deploytools.model.TableParse;
 import com.cfg.deploytools.service.FileService;
 import com.cfg.deploytools.service.TaskService;
+import com.cfg.deploytools.utils.DateUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -40,7 +42,7 @@ public class TaskController {
      * @Param [taskId]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
-    @ApiOperation(value = "获取当前任务正在使用的所有文件",notes = "获取当前任务正在使用的所有文件")
+    @ApiOperation(value = "获取当前任务正在使用的所有文件", notes = "获取当前任务正在使用的所有文件")
     @ResponseBody
     @RequestMapping("/{taskId}")
     public AjaxResult getTaskCurrentFile(@PathVariable("taskId") String taskId) {
@@ -61,6 +63,24 @@ public class TaskController {
     @RequestMapping("/list/{projectId}")
     public AjaxResult getTaskList(TableParse tableParse, @PathVariable("projectId") String projectId) {
         return taskService.getTaskListByProjectId(tableParse, Integer.parseInt(projectId));
+    }
+
+    @ApiOperation(value = "搜索", notes = "搜索")
+    @RequestMapping("/search")
+    @ResponseBody
+    public AjaxResult search(TableParse tableParse, String status, String projectId, String taskId, String start, String end) {
+        // System.out.println(status);
+        // System.out.println(projectId);
+        // System.out.println(taskId);
+        // System.out.println(start);
+        // System.out.println(end);
+
+        taskId = (taskId == null || taskId.equals("")) ? "0" : taskId;
+        status = status.equals("") ? null : status;
+        Timestamp startTime = start.equals("") ? null : DateUtils.strToSqlDate(start,"yyyy-MM-dd HH:mm");
+        Timestamp endTime = end.equals("") ? null : DateUtils.strToSqlDate(end,"yyyy-MM-dd HH:mm");
+
+        return taskService.searchByCondition(tableParse, status,projectId, taskId, startTime, endTime);
     }
 
 

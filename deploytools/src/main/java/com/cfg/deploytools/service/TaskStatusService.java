@@ -6,6 +6,7 @@ import com.cfg.deploytools.model.File;
 import com.cfg.deploytools.model.TaskFile;
 import com.cfg.deploytools.model.TaskStatus;
 import com.cfg.deploytools.shiro.utils.ShiroUtils;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

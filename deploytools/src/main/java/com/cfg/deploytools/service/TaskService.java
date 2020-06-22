@@ -9,6 +9,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -33,14 +34,34 @@ public class TaskService {
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
     public AjaxResult getTaskListByProjectId(TableParse tableParse, int projectId) {
+        PageHelper.startPage(tableParse.getPageNum(), tableParse.getPageSize());
         List<Task> taskList = taskMapper.getTaskListByProjectId(projectId);
-        List<Task> taskList2 = taskMapper.getTaskListByProjectId2(projectId);
-        taskList.addAll(taskList2);
-        System.out.println(taskList.size());
 
         if (taskList != null) {
-            PageHelper.startPage(tableParse.getPageNum(), tableParse.getPageSize());
-            PageInfo<Task> pageInfo = new PageInfo<>(taskList);
+            PageInfo<Task> pageInfo = new PageInfo<Task>(taskList);
+            return AjaxResult.success(200, pageInfo);
+        } else {
+            return AjaxResult.error("操作失败，请稍后重试");
+        }
+    }
+
+    /*
+     * @Author wadreamer
+     * @Description //TODO 搜索，利用 SQL 的 union，求两个表的并集
+     * @Date 16:56 2020/6/22
+     * @Param [tableParse, status, projectId, taskId, start, end]
+     * @return com.cfg.deploytools.common.domain.AjaxResult
+     **/
+    public AjaxResult searchByCondition(TableParse tableParse, String status,String projectId, String taskId, Timestamp start, Timestamp end) {
+
+        if(projectId == null || projectId.equals("")){
+            return AjaxResult.error("请先选择项目工程");
+        }
+
+        PageHelper.startPage(tableParse.getPageNum(), tableParse.getPageSize());
+        List<Task> taskList = taskMapper.searchByCondition(status, Integer.parseInt(projectId), Integer.parseInt(taskId), start, end);
+        if (taskList != null) {
+            PageInfo<Task> pageInfo = new PageInfo<Task>(taskList);
             return AjaxResult.success(200, pageInfo);
         } else {
             return AjaxResult.error("操作失败，请稍后重试");

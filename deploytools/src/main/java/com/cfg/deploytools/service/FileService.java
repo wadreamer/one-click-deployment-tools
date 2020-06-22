@@ -49,9 +49,9 @@ public class FileService {
             f.setFullPath(fullPath);
             // 获取文件后缀名
             String suffixName = fullPath.substring(fullPath.lastIndexOf(".")).toLowerCase();
-
+            String firstName = fullPath.indexOf("_") != -1 ? fullPath.substring(0, fullPath.indexOf("_")).toLowerCase() : "";
             // 判断文件类型
-            if (suffixName.equals(".sql")) {
+            if (suffixName.equals(".sql") || firstName.equals("proc")) {
                 f.setSqlData(content);
                 f.setType("sql");
             } else {

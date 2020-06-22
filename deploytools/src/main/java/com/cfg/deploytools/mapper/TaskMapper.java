@@ -3,6 +3,7 @@ package com.cfg.deploytools.mapper;
 import com.cfg.deploytools.model.Task;
 import org.apache.ibatis.annotations.Param;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -17,4 +18,6 @@ public interface TaskMapper {
     List<Task> getTaskListByProjectId(@Param("projectId") Integer projectId);
 
     List<Task> getTaskListByProjectId2(@Param("projectId") Integer projectId);
+
+    List<Task> searchByCondition(@Param("status") String status, @Param("projectId") Integer projectId, @Param("taskId") Integer taskId, @Param("start") Timestamp start, @Param("end") Timestamp end);
 }

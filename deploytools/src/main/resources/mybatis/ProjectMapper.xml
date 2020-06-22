@@ -7,7 +7,7 @@
     </resultMap>
 
     <select id="getProjectList" resultType="com.cfg.deploytools.model.Project">
-        select id, name from zt_project
+        select id, name from zt_project order by begin desc
     </select>
     
 </mapper>

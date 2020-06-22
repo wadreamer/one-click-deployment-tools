@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @since JDK 1.8
  */
 
-@CrossOrigin//跨域问题
+// @CrossOrigin//跨域问题
 @RequestMapping("/cfg_dt")
 @Controller
 public class LoginController {
@@ -42,9 +42,10 @@ public class LoginController {
         //获取当前用户
         Subject subject = SecurityUtils.getSubject();
         //将前端密码转为MD5
-        String MD5_PassWord = MD5Util.encode(user.getPassword());
+        // String MD5_PassWord = MD5Util.encode(user.getPassword());
         //封装用户的登入数据
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getAccount(), MD5_PassWord);
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getAccount(), user.getPassword());
+
         try{
             subject.login(token);
             return AjaxResult.success(200,"登入成功");
