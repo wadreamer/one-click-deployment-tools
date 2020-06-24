@@ -21,4 +21,6 @@ public interface TaskFileMapper {
 
     int deleteTaskFile(@Param("taskFiles") List<TaskFile> taskFile);
 
+    int updateFileIdZeroByTaskIdAndFullPath(@Param("taskId") Integer taskId, @Param("fullPath") String fullPath,@Param("fileId") Integer fileId);
+
 }

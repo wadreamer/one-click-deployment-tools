@@ -1,5 +1,6 @@
 package com.cfg.deploytools.service;
 
+import com.cfg.deploytools.common.domain.AjaxResult;
 import com.cfg.deploytools.mapper.TaskFileMapper;
 import com.cfg.deploytools.model.TaskFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,12 @@ public class TaskFileService {
     @Transactional
     public int deleteTaskFile(List<TaskFile> taskFile){
         return taskFileMapper.deleteTaskFile(taskFile);
+    }
+
+    @Transactional
+    public AjaxResult disableFileWithUpdateZero(String taskId, String fullPath,String fileId){
+        int result = taskFileMapper.updateFileIdZeroByTaskIdAndFullPath(Integer.parseInt(taskId),fullPath,Integer.parseInt(fileId));
+        return result > 0 ? AjaxResult.success("操作成功") : AjaxResult.error("操作失败，请稍后重试！");
     }
 
 }

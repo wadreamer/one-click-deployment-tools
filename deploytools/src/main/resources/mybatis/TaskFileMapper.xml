@@ -23,5 +23,11 @@
         </foreach>
     </delete>
 
+    <update id="updateFileIdZeroByTaskIdAndFullPath">
+        update cfg_taskfile
+        set file_id = #{fileId}
+        where task_id = #{taskId} and full_path = #{fullPath}
+    </update>
+
 
 </mapper>

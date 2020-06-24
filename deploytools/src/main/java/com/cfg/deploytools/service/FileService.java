@@ -26,6 +26,9 @@ public class FileService {
     @Autowired
     private FileMapper fileMapper;
 
+    @Autowired
+    private TaskFileService taskFileService;
+
     /*
      * @Author wadreamer
      * @Description //TODO 文件上传
@@ -65,7 +68,6 @@ public class FileService {
         int result = fileMapper.insertSelectiveFile(f);
 
         return result > 0 ? AjaxResult.success(200, "上传成功") : AjaxResult.error("上传失败，请稍后重试");
-
     }
 
     /*
@@ -121,8 +123,8 @@ public class FileService {
      * @Param [fileId]
      * @return java.util.List<com.cfg.deploytools.model.File>
      **/
-    public List<File> getFileHistory(int fileId) {
-        return fileMapper.queryFileHistoryByFullPath(fileId);
+    public List<File> getFileHistory(String fullPath) {
+        return fileMapper.queryFileHistoryByFullPath(fullPath);
     }
 
     /*
@@ -152,7 +154,6 @@ public class FileService {
             return false;
         }
     }
-
 
     public File getFileById(int fileId){
         return fileMapper.queryFileById(fileId);

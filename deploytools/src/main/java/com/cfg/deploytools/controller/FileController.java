@@ -4,16 +4,16 @@ import com.cfg.deploytools.common.domain.AjaxResult;
 import com.cfg.deploytools.model.File;
 import com.cfg.deploytools.model.TaskFile;
 import com.cfg.deploytools.service.FileService;
+import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,19 +41,39 @@ public class FileController {
      **/
     @ApiOperation(value = "上传文件", notes = "上传文件")
     @ResponseBody
-    @PostMapping("/upload")
-    public AjaxResult fileUpload(MultipartFile file, String content, String fullPath, String taskId, boolean flag) {
+    @RequestMapping(value = "/upload", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
+    public AjaxResult fileUpload(@RequestParam(value = "files") MultipartFile[] files, String content, String fullPath, String taskId, boolean flag) {
+        System.out.println(files.length);
         // 存储过程的前缀名 proc_
         String firstName = fullPath.indexOf("_") != -1 ? fullPath.substring(0, fullPath.indexOf("_")).toLowerCase() : "";
-        if (!file.isEmpty()) {
-            if ((fileService.checkConflict(fullPath, Integer.parseInt(taskId)) || firstName.equals("proc")) && !flag) {
-                return AjaxResult.error("上传的文件：" + fullPath + "存在冲突，是否继续上传");
+        for(MultipartFile file : files) {
+            if (!file.isEmpty()) {
+                if ((fileService.checkConflict(fullPath, Integer.parseInt(taskId)) || firstName.equals("proc")) && !flag) {
+                    return AjaxResult.error("上传的文件：" + fullPath + "存在冲突，是否继续上传");
+                }
+                return fileService.upload(file, fullPath);
+            } else {
+                return fileService.upload(content, fullPath);
             }
-            return fileService.upload(file, fullPath);
-        } else {
-            return fileService.upload(content, fullPath);
         }
+        return AjaxResult.success(200, new ArrayList<>(Arrays.asList(files)));
     }
+
+    // @ApiOperation(value = "上传文件", notes = "上传文件")
+    // @ResponseBody
+    // @PostMapping("/upload")
+    // public AjaxResult fileUpload(MultipartFile file, String content, String fullPath, String taskId, boolean flag) {
+    //     // 存储过程的前缀名 proc_
+    //     String firstName = fullPath.indexOf("_") != -1 ? fullPath.substring(0, fullPath.indexOf("_")).toLowerCase() : "";
+    //     if (!file.isEmpty()) {
+    //         if ((fileService.checkConflict(fullPath, Integer.parseInt(taskId)) || firstName.equals("proc")) && !flag) {
+    //             return AjaxResult.error("上传的文件：" + fullPath + "存在冲突，是否继续上传");
+    //         }
+    //         return fileService.upload(file, fullPath);
+    //     } else {
+    //         return fileService.upload(content, fullPath);
+    //     }
+    // }
 
     /*
      * @Author wadreamer
@@ -79,9 +99,9 @@ public class FileController {
      **/
     @ApiOperation(value = "获取某个文件的所有历史版本", notes = "获取某个文件的所有历史版本")
     @ResponseBody
-    @RequestMapping("/history/{fileId}")
-    public AjaxResult fileHistory(@PathVariable("fileId") String fileId) {
-        List<File> list = fileService.getFileHistory(Integer.parseInt(fileId));
+    @RequestMapping("/history")
+    public AjaxResult fileHistory(String fullPath) {
+        List<File> list = fileService.getFileHistory(fullPath);
         return list != null ? AjaxResult.success(200, list) : AjaxResult.error("操作失败，请稍后重试");
     }
 
@@ -106,4 +126,5 @@ public class FileController {
         File deployFile = fileService.getFileById(fileId);
         return deployFile.getFileData() != null ? AjaxResult.success(200, deployFile) : AjaxResult.error("操作失败，请稍后重试");
     }
+
 }

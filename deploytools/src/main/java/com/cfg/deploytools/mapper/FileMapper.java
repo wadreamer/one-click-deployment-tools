@@ -22,7 +22,7 @@ public interface FileMapper {
 
     List<File> queryCurrentAllFileByTaskId(int taskId);
 
-    List<File> queryFileHistoryByFullPath(int fileId);
+    List<File> queryFileHistoryByFullPath(String fullPath);
 
     int insertSelectiveFile(File file);
 
@@ -33,4 +33,5 @@ public interface FileMapper {
     List<File> checkConflictWithTaskStatus(@Param("fullPath") String fullPath);
 
     File queryFileById(int fileId);
+
 }

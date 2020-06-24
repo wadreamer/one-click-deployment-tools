@@ -31,18 +31,28 @@
     </select>
 
     <select id="queryCurrentAllFileByTaskId" parameterType="Integer" resultMap="BaseResultMap">
-        select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type
-        from cfg_file f
+        select tf.file_id, tf.full_path,
+        if(tf.file_id=0, null,f.upload_time) as upload_time,
+        if(SUBSTRING(tf.full_path, POSITION('.' in tf.full_path)) != '.sql', 'file' ,'sql') as type
+        from cfg_file f, cfg_taskfile tf
         where f.file_id in (
         SELECT file_id from cfg_taskfile where task_id = #{taskId}
         )
+        GROUP BY tf.full_path
     </select>
 
-    <select id="queryFileHistoryByFullPath" parameterType="Integer" resultMap="BaseResultMap">
+    <!--<select id="queryCurrentAllFileByTaskId" parameterType="Integer" resultMap="BaseResultMap">-->
+    <!--    select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type-->
+    <!--    from cfg_file f-->
+    <!--    where f.file_id in (-->
+    <!--    SELECT file_id from cfg_taskfile where task_id = #{taskId}-->
+    <!--    )-->
+    <!--</select>-->
+
+    <select id="queryFileHistoryByFullPath" parameterType="String" resultMap="BaseResultMap">
         select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type
         from cfg_file f
-        where f.full_path in
-        (select full_path from cfg_file where file_id = #{fileId})
+        where f.full_path = #{fullPath}
         ORDER BY f.upload_time desc
     </select>
 
@@ -85,7 +95,7 @@
         from cfg_file f
         where f.file_id = #{fileId}
     </select>
-    
+
     <select id="checkConflictWithTime" resultMap="BaseResultMap">
         select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type,
         tf.task_id
