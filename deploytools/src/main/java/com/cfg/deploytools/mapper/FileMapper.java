@@ -28,9 +28,9 @@ public interface FileMapper {
 
     File queryFileContent(TaskFile taskFile);
 
-    List<File> checkConflictWithTime(@Param("fullPath") String fullPath, @Param("taskId") int taskId);
+    List<File> checkConflictWithTime(@Param("fullPath") String fullPath, @Param("taskId") int taskId); // 检测时间上的冲突
 
-    List<File> checkConflictWithTaskStatus(@Param("fullPath") String fullPath);
+    List<File> checkConflictWithTaskStatus(@Param("fullPath") String fullPath); // 检测任务状态上的冲突
 
     File queryFileById(int fileId);
 
