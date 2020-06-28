@@ -24,11 +24,21 @@
 
     <select id="getTaskListByProjectId" resultMap="BaseResultMap" parameterType="Integer">
         select t.id, t.project, t.name,
-        if(t.id = ts.task_id, ts.status, t.status) status,
-        t.openedBy, t.openedDate, t.finishedBy, t.finishedDate
-        from zt_task t, cfg_taskstatus ts
-        where project = #{projectId}
-        GROUP BY t.name
+        t.status,
+        t.openedBy, t.openedDate, t.finishedBy, t.finishedDate, t.assignedDate
+        from
+        zt_task t, cfg_taskstatus ts
+        where
+        t.project = #{projectId}
+        and t.id not in(select task_id from cfg_taskstatus)
+        UNION
+        select t.id, t.project, t.name,
+        ts.status,
+        t.openedBy, t.openedDate, t.finishedBy, t.finishedDate ,t.assignedDate
+        from
+        zt_task t, cfg_taskstatus ts
+        where
+        t.project = #{projectId} and t.id = ts.task_id
         order by assignedDate desc
     </select>
 

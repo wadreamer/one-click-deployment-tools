@@ -60,11 +60,15 @@ public class TaskStatusService {
     @Transactional
     public AjaxResult updateTaskStatusForTest(TaskStatus taskStatus, boolean flag) {
 
+        System.out.println(flag);
+
         String operPerson = ShiroUtils.getUser().getAccount();
 
         if (taskStatusMapper.updateTaskStatusForTesting(taskStatus) > 0 && !flag) {
             return AjaxResult.success(200, "操作成功");
         }
+
+        System.out.println(flag);
 
         if (taskStatusMapper.updateTaskStatusForPass(taskStatus, operPerson) > 0 && flag) {
             return AjaxResult.success(200, "操作成功");
