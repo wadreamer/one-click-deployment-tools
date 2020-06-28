@@ -6,9 +6,11 @@ import com.cfg.deploytools.model.FileMapLocalPath;
 import com.cfg.deploytools.model.SQLFile;
 import com.cfg.deploytools.model.TaskFile;
 import com.cfg.deploytools.service.FileService;
+import com.cfg.deploytools.utils.StringUtils;
 import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.AnnotationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -45,12 +47,16 @@ public class FileController {
     @ResponseBody
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public AjaxResult fileUpload(MultipartFile[] files,
-                                 String[] sqlFiles,
+                                 String sqlFiles,
                                  String taskId,
-                                 String[] fileMapLocalPath,
+                                 String fileMapLocalPath,
                                  String configurationPath, boolean flag) {
 
-        return fileService.upload(files, sqlFiles, Integer.parseInt(taskId), fileMapLocalPath, configurationPath);
+        String[] sqlFileArr = sqlFiles != null ? StringUtils.JsonStringHandler(sqlFiles) : null;
+        String[] configurationPathArr = fileMapLocalPath != null ? StringUtils.JsonStringHandler(fileMapLocalPath) : null;
+
+        return fileService.upload(files, sqlFileArr, Integer.parseInt(taskId), configurationPathArr, configurationPath);
+        // return null;
     }
 
     @ApiOperation(value = "检测冲突", notes = "检测冲突")
