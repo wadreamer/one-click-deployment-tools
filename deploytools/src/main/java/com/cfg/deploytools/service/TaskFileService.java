@@ -50,4 +50,10 @@ public class TaskFileService {
         return result > 0 ? AjaxResult.success("操作成功") : AjaxResult.error("操作失败，请稍后重试！");
     }
 
+    @Transactional
+    public int insertTaskFile(List<TaskFile> taskFileList){
+        return taskFileMapper.insertTaskFileList(taskFileList);
+
+    }
+
 }

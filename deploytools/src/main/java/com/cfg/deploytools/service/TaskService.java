@@ -4,6 +4,7 @@ import com.cfg.deploytools.common.domain.AjaxResult;
 import com.cfg.deploytools.mapper.TaskMapper;
 import com.cfg.deploytools.model.TableParse;
 import com.cfg.deploytools.model.Task;
+import com.cfg.deploytools.shiro.utils.ShiroUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +67,22 @@ public class TaskService {
         } else {
             return AjaxResult.error("操作失败，请稍后重试");
         }
+    }
+
+    /*
+     * @Author wadreamer
+     * @Description //TODO 获取对应任务的工程主键
+     * @Date 10:05 2020/6/28
+     * @Param [taskId]
+     * @return int
+     **/
+    public int getProjectId(int taskId){
+        int result_projectId = taskMapper.queryProjectIdByTaskId(taskId).getProjectId();
+        return result_projectId > 0 ? result_projectId : 0;
+    }
+
+    public int updateStatus(Integer taskId){
+        int result_update = taskMapper.updateStatusForUpload(taskId, ShiroUtils.getUser().getAccount());
+        return result_update > 0 ? result_update : 0;
     }
 }

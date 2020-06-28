@@ -21,6 +21,15 @@ public class TaskStatus implements Serializable {
 
     private String status; // 任务状态
 
+    public TaskStatus() {
+    }
+
+    public TaskStatus(Integer taskId, Integer projectId, String status) {
+        this.taskId = taskId;
+        this.projectId = projectId;
+        this.status = status;
+    }
+
     public Integer getTaskId() {
         return taskId;
     }

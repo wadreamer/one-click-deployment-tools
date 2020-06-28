@@ -21,6 +21,14 @@ public class TaskFile implements Serializable {
 
     private Integer fileId; // 文件主键
 
+    public TaskFile(){}
+
+    public TaskFile(Integer taskId, String fullPath, Integer fileId) {
+        this.taskId = taskId;
+        this.fullPath = fullPath;
+        this.fileId = fileId;
+    }
+
     public Integer getTaskId() {
         return taskId;
     }

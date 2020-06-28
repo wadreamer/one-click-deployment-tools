@@ -1,6 +1,5 @@
 package com.cfg.deploytools.controller;
 
-import com.alibaba.druid.support.json.JSONUtils;
 import com.cfg.deploytools.common.domain.AjaxResult;
 import com.cfg.deploytools.model.File;
 import com.cfg.deploytools.model.FileMapLocalPath;
@@ -8,7 +7,6 @@ import com.cfg.deploytools.model.SQLFile;
 import com.cfg.deploytools.model.TaskFile;
 import com.cfg.deploytools.service.FileService;
 import com.google.gson.Gson;
-import com.mysql.cj.jdbc.SuspendableXAConnection;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,89 +44,23 @@ public class FileController {
     @ApiOperation(value = "上传文件", notes = "上传文件")
     @ResponseBody
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public AjaxResult fileUpload(@RequestParam("files") MultipartFile[] files,
-                                 @RequestParam("SQLFiles") String[] sqlFiles,
-                                 @RequestParam("taskId") String taskId,
-                                 @RequestParam("fileMapLocalPath") String[] fileMapLocalPath,
-                                 @RequestParam("configurationPath") String configurationPath, boolean flag) {
+    public AjaxResult fileUpload(MultipartFile[] files,
+                                 String[] sqlFiles,
+                                 String taskId,
+                                 String[] fileMapLocalPath,
+                                 String configurationPath, boolean flag) {
 
-        // 将所有的文件以 文件名 - 文件 的形式存储到一个 map 中
-        HashMap<String, MultipartFile> map = new HashMap<>();
-        for (MultipartFile file : files) {
-            map.put(file.getOriginalFilename(), file);
-        }
+        return fileService.upload(files, sqlFiles, Integer.parseInt(taskId), fileMapLocalPath, configurationPath);
+    }
 
-        // 将 文件名 - 文件路径 转成对象, 并保存到 ArrayList 中
-        // 并检测文件是否存在冲突
-        List<FileMapLocalPath> fileMapLocalPathList = new ArrayList<>();
-        FileMapLocalPath fmp;
-        for (String filePath : fileMapLocalPath) {
-            fmp = new Gson().fromJson(filePath.replaceAll("\\\\", "\\\\\\\\"), FileMapLocalPath.class);
+    @ApiOperation(value = "检测冲突", notes = "检测冲突")
+    @ResponseBody
+    @RequestMapping(value = "/checkConflict")
+    public AjaxResult checkConflict() {
 
-            int end = fmp.getLocalPath().length();
-            int start = configurationPath.length();
-            fmp.setLocalPath(fmp.getLocalPath().substring(start, end - 1));
-            fileMapLocalPathList.add(fmp);
-
-            if (fileService.checkConflict(fmp.getLocalPath(), Integer.parseInt(taskId)) && !flag) {
-                return AjaxResult.error("上传的文件存在冲突的可能，是否要继续上传");
-            }
-        }
-
-        // 检测 存储过程proc_ 是否存在冲突
-
-        for (String sql : sqlFiles) {
-            System.out.println(sql);
-            SQLFile sqlFile = new Gson().fromJson(sql, SQLFile.class);
-
-            int end = sqlFile.getPath().length();
-            int start = configurationPath.length();
-            sqlFile.setPath(sqlFile.getPath().substring(start, end)); // 没有传入 path，path为空
-
-
-            System.out.println(sqlFile.getPath());
-        }
-
-
-        //for (MultipartFile f : files) {
-        //    System.out.println(new Gson().toJson(f));
-        //}
-        //
-        //for (MultipartFile f : files) {
-        //    System.out.println(f.getOriginalFilename());
-        //}
-        //
-
-        // 存储过程的前缀名 proc_
-        //String firstName = fullPath.indexOf("_") != -1 ? fullPath.substring(0, fullPath.indexOf("_")).toLowerCase() : "";
-        //for(MultipartFile file : files) {
-        //    if (!file.isEmpty()) {
-        //        if ((fileService.checkConflict(fullPath, Integer.parseInt(taskId)) || firstName.equals("proc")) && !flag) {
-        //            return AjaxResult.error("上传的文件：" + fullPath + "存在冲突，是否继续上传");
-        //        }
-        //        return fileService.upload(file, fullPath);
-        //    } else {
-        //        return fileService.upload(content, fullPath);
-        //    }
-        //}
         return null;
     }
 
-    // @ApiOperation(value = "上传文件", notes = "上传文件")
-    // @ResponseBody
-    // @PostMapping("/upload")
-    // public AjaxResult fileUpload(MultipartFile file, String content, String fullPath, String taskId, boolean flag) {
-    //     // 存储过程的前缀名 proc_
-    //     String firstName = fullPath.indexOf("_") != -1 ? fullPath.substring(0, fullPath.indexOf("_")).toLowerCase() : "";
-    //     if (!file.isEmpty()) {
-    //         if ((fileService.checkConflict(fullPath, Integer.parseInt(taskId)) || firstName.equals("proc")) && !flag) {
-    //             return AjaxResult.error("上传的文件：" + fullPath + "存在冲突，是否继续上传");
-    //         }
-    //         return fileService.upload(file, fullPath);
-    //     } else {
-    //         return fileService.upload(content, fullPath);
-    //     }
-    // }
 
     /*
      * @Author wadreamer

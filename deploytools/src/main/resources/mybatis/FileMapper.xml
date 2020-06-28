@@ -56,39 +56,54 @@
         ORDER BY f.upload_time desc
     </select>
 
-    <insert id="insertSelectiveFile" parameterType="com.cfg.deploytools.model.File" useGeneratedKeys="true">
+    <insert id="insertSelectiveFile" parameterType="list" useGeneratedKeys="true" keyProperty="fileId" keyColumn="file_id">
         insert into cfg_file
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="fullPath != null">
-                full_path,
-            </if>
-            <if test="fileData != null">
-                file_data,
-            </if>
-            <if test="sqlData != null">
-                sql_data,
-            </if>
-                upload_time,
-            <if test="type != null">
-                type
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="fullPath != null">
-                #{fullPath,jdbcType=VARCHAR},
-            </if>
-            <if test="fileData != null">
-                #{fileData,jdbcType=VARCHAR},
-            </if>
-            <if test="sqlData != null">
-                #{sqlData,jdbcType=VARCHAR},
-            </if>
+        (full_path,file_data,sql_data,upload_time,type)
+        values
+        <foreach collection="list" item="item" separator="," index="index">
+            (
+                #{item.fullPath,jdbcType=VARCHAR},
+                #{item.fileData,jdbcType=VARCHAR},
+                #{item.sqlData,jdbcType=VARCHAR},
                 now(),
-            <if test="type != null">
-                #{type,jdbcType=INTEGER}
-            </if>
-        </trim>
+                #{item.type,jdbcType=INTEGER}
+            )
+        </foreach>
     </insert>
+
+    <!--<insert id="insertSelectiveFile" parameterType="com.cfg.deploytools.model.File" useGeneratedKeys="true" keyProperty="fileId">-->
+    <!--    insert into cfg_file-->
+    <!--    <trim prefix="(" suffix=")" suffixOverrides=",">-->
+    <!--        <if test="fullPath != null">-->
+    <!--            full_path,-->
+    <!--        </if>-->
+    <!--        <if test="fileData != null">-->
+    <!--            file_data,-->
+    <!--        </if>-->
+    <!--        <if test="sqlData != null">-->
+    <!--            sql_data,-->
+    <!--        </if>-->
+    <!--            upload_time,-->
+    <!--        <if test="type != null">-->
+    <!--            type-->
+    <!--        </if>-->
+    <!--    </trim>-->
+    <!--    <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+    <!--        <if test="fullPath != null">-->
+    <!--            #{fullPath,jdbcType=VARCHAR},-->
+    <!--        </if>-->
+    <!--        <if test="fileData != null">-->
+    <!--            #{fileData,jdbcType=VARCHAR},-->
+    <!--        </if>-->
+    <!--        <if test="sqlData != null">-->
+    <!--            #{sqlData,jdbcType=VARCHAR},-->
+    <!--        </if>-->
+    <!--            now(),-->
+    <!--        <if test="type != null">-->
+    <!--            #{type,jdbcType=INTEGER}-->
+    <!--        </if>-->
+    <!--    </trim>-->
+    <!--</insert>-->
 
     <select id="queryFileContent" parameterType="com.cfg.deploytools.model.TaskFile" resultMap="BaseResultMap">
         select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type

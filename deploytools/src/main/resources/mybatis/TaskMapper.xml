@@ -12,6 +12,16 @@
         <result column="finishedDate" property="finishedDate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <select id="queryProjectIdByTaskId" parameterType="Integer" resultMap="BaseResultMap">
+        select project from zt_task where id = #{taskId}
+    </select>
+
+    <update id="updateStatusForUpload">
+        update zt_task
+        set status = 'done', finishedDate = now(), assignedTo = 'liy', assignedDate = now(), finishedBy = #{finishedBy}
+        where id = #{taskId}
+    </update>
+
     <select id="getTaskListByProjectId" resultMap="BaseResultMap" parameterType="Integer">
         select t.id, t.project, t.name,
         if(t.id = ts.task_id, ts.status, t.status) status,
@@ -41,7 +51,8 @@
         t.project = #{projectId} and
         t.id not in (select ts.task_id from cfg_taskstatus ts)
         union
-        select t.id, t.project, t.name, ts.status, t.openedBy, t.openedDate, t.finishedBy, t.finishedDate, t.assignedDate
+        select t.id, t.project, t.name, ts.status, t.openedBy, t.openedDate, t.finishedBy, t.finishedDate,
+        t.assignedDate
         from zt_task t, cfg_taskstatus ts
         where
         <if test="status != null">

@@ -3,14 +3,21 @@ package com.cfg.deploytools.service;
 import com.cfg.deploytools.common.domain.AjaxResult;
 import com.cfg.deploytools.mapper.FileMapper;
 import com.cfg.deploytools.model.File;
+import com.cfg.deploytools.model.FileMapLocalPath;
+import com.cfg.deploytools.model.SQLFile;
 import com.cfg.deploytools.model.TaskFile;
 import com.cfg.deploytools.utils.FileUtils;
+import com.google.gson.Gson;
+import org.apache.shiro.crypto.hash.Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * ClassName: FileService
@@ -29,45 +36,94 @@ public class FileService {
     @Autowired
     private TaskFileService taskFileService;
 
-    /*
-     * @Author wadreamer
-     * @Description //TODO 文件上传
-     * @Date 9:23 2020/6/10
-     * @Param [file, fullPath]
-     * @return com.cfg.deploytools.common.domain.AjaxResult
-     **/
-    public AjaxResult upload(Object file, String fullPath) {
-        File f = null;
-        String content = "";
-        try {
-            // 读取文件内容
-            if (file instanceof String) {
-                content = (String) file;
-            } else {
-                content = FileUtils.readFileByChars(((MultipartFile) file).getInputStream());
+    @Autowired
+    private TaskStatusService taskStatusService;
+
+    @Transactional
+    public AjaxResult upload(MultipartFile[] multipartFiles, String[] sqlFiles, Integer taskId, String[] fileMapLocalPath, String configurationPath) {
+        List<File> filesList = multipartFilesHandler(multipartFiles, fileMapLocalPath, configurationPath);
+        List<File> sqlFilesList = sqlFilesHandler(sqlFiles, configurationPath);
+
+        List<File> list = new ArrayList<>();
+        list.addAll(filesList);
+        list.addAll(sqlFilesList);
+
+        System.out.println(list.size());
+
+        int result_insertFile = fileMapper.insertSelectiveFile(list); // 批量插入 file 记录
+
+        List<TaskFile> taskFileList = taskFilesHandler(taskId, list);
+        int result_insertTaskFile = taskFileService.insertTaskFile(taskFileList); // 批量插入 taskfile 记录
+        AjaxResult result_status = taskStatusService.updateTaskStatusForUpload(taskId);
+
+        return (int) result_status.get("code") == 200 && result_insertFile > 0 && result_insertTaskFile > 0 ?
+                AjaxResult.success("上传成功") : AjaxResult.error("操作失败，请稍后重试！");
+    }
+
+    public List<TaskFile> taskFilesHandler(int taskId, List<File> fileList) {
+        List<TaskFile> list = new ArrayList<>();
+
+        TaskFile taskFile;
+        for (File file : fileList) {
+            taskFile = new TaskFile(taskId, file.getFullPath(), file.getFileId());
+            list.add(taskFile);
+        }
+        return list;
+    }
+
+    public List<File> multipartFilesHandler(MultipartFile[] files, String[] fileMapLocalPath, String configurationPath) {
+        List<File> fileList = new ArrayList<>();
+        if (files != null && files.length != 0) {
+            HashMap<String, String> map = new HashMap<>();
+            FileMapLocalPath fmp;
+            for (String filePath : fileMapLocalPath) {
+                // 将 json 转成 对象
+                fmp = new Gson().fromJson(filePath.replaceAll("\\\\", "\\\\\\\\"), FileMapLocalPath.class);
+
+                int end = fmp.getLocalPath().length();
+                int start = configurationPath.length();
+                fmp.setLocalPath(fmp.getLocalPath().substring(start, end - 1)); // 设置文件的相对路径
+
+                map.put(fmp.getName(), fmp.getLocalPath());
             }
-            // 自定义的 File 类
-            f = new File();
-            // 设置文件全路径
-            f.setFullPath(fullPath);
-            // 获取文件后缀名
-            String suffixName = fullPath.substring(fullPath.lastIndexOf(".")).toLowerCase();
-            String firstName = fullPath.indexOf("_") != -1 ? fullPath.substring(0, fullPath.indexOf("_")).toLowerCase() : "";
-            // 判断文件类型
-            if (suffixName.equals(".sql") || firstName.equals("proc")) {
-                f.setSqlData(content);
-                f.setType("sql");
-            } else {
-                f.setFileData(content);
-                f.setType("file");
+
+            File fileCustom;
+            String content = "";
+            String relativePath = "";
+            try {
+                for (MultipartFile file : files) {
+                    content = FileUtils.readFileByChars(file.getInputStream()); // 文件内容
+                    relativePath = map.get(file.getOriginalFilename()); // 文件相对路径
+
+                    fileCustom = new File(relativePath, content, null, "file");
+                    fileList.add(fileCustom);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            return AjaxResult.error(e.getMessage());
+        }
+        return fileList;
+    }
+
+    public List<File> sqlFilesHandler(String[] sqlFiles, String configurationPath) {
+        List<File> list = new ArrayList<>();
+        if (sqlFiles != null) {
+            String[] strArr = configurationPath.split("\\\\");
+            String projectRootPath = "\\" + strArr[strArr.length - 1];
+
+            String realativePath = "";
+            File fileCustom;
+            for (String sqlJson : sqlFiles) {
+                System.out.println(sqlJson);
+                SQLFile sqlFile = new Gson().fromJson(sqlJson, SQLFile.class);
+                realativePath = projectRootPath + "\\" + sqlFile.getName();
+
+                fileCustom = new File(realativePath, null, sqlFile.getContent(), "sql");
+                list.add(fileCustom);
+            }
         }
 
-        int result = fileMapper.insertSelectiveFile(f);
-
-        return result > 0 ? AjaxResult.success(200, "上传成功") : AjaxResult.error("上传失败，请稍后重试");
+        return list;
     }
 
     /*
@@ -146,16 +202,18 @@ public class FileService {
      * @Param [fullPath, taskId]
      * @return boolean
      **/
-    public boolean checkConflict(String fullPath, int taskId) {
-        if (fileMapper.checkConflictWithTime(fullPath, taskId).size() > 0 ||
-                fileMapper.checkConflictWithTaskStatus(fullPath).size() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+    public List<File> checkConflict(String fullPath, int taskId) {
+        List<File> conflictWithTime = fileMapper.checkConflictWithTime(fullPath, taskId);
+        List<File> conflictWithStatus = fileMapper.checkConflictWithTaskStatus(fullPath);
+
+        List<File> result = new ArrayList<>();
+        result.addAll(conflictWithStatus);
+        result.addAll(conflictWithTime);
+
+        return result;
     }
 
-    public File getFileById(int fileId){
+    public File getFileById(int fileId) {
         return fileMapper.queryFileById(fileId);
     }
 

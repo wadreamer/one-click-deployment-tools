@@ -1,8 +1,10 @@
 package com.cfg.deploytools.service;
 
 import com.cfg.deploytools.common.domain.AjaxResult;
+import com.cfg.deploytools.mapper.TaskMapper;
 import com.cfg.deploytools.mapper.TaskStatusMapper;
 import com.cfg.deploytools.model.File;
+import com.cfg.deploytools.model.Task;
 import com.cfg.deploytools.model.TaskFile;
 import com.cfg.deploytools.model.TaskStatus;
 import com.cfg.deploytools.shiro.utils.ShiroUtils;
@@ -33,6 +35,20 @@ public class TaskStatusService {
 
     @Autowired
     private TaskStatusMapper taskStatusMapper;
+
+    @Autowired
+    private TaskService taskService;
+
+    @Transactional
+    public AjaxResult updateTaskStatusForUpload(int taskId) {
+        int projectId = taskService.getProjectId(taskId);
+        TaskStatus taskStatus = new TaskStatus(taskId, projectId, "待测试");
+
+        int result_insertTaskStatus = taskStatusMapper.insertTaskStatusForUpload(taskStatus);
+        int result_updateTask = taskService.updateStatus(taskId);
+
+        return result_insertTaskStatus > 0 && result_updateTask > 0 ? AjaxResult.success(200, "操作成功") : AjaxResult.error("操作失败");
+    }
 
     /*
      * @Author wadreamer

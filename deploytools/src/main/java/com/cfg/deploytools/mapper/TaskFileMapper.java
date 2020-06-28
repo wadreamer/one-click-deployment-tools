@@ -23,4 +23,6 @@ public interface TaskFileMapper {
 
     int updateFileIdZeroByTaskIdAndFullPath(@Param("taskId") Integer taskId, @Param("fullPath") String fullPath,@Param("fileId") Integer fileId);
 
+    int insertTaskFileList(List<TaskFile> list);
+
 }

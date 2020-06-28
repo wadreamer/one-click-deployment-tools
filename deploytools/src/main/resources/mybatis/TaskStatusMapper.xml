@@ -31,4 +31,9 @@
         where task_id = #{taskId}
     </delete>
 
+    <insert id="insertTaskStatusForUpload" parameterType="com.cfg.deploytools.model.TaskStatus">
+        insert ignore cfg_taskstatus
+        (task_id, project_id, status) value (#{taskId},#{projectId},#{status})
+    </insert>
+
 </mapper>

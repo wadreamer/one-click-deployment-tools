@@ -43,11 +43,8 @@ public class APIController {
         return result > 0 ? AjaxResult.success("操作成功") : AjaxResult.error("操作失败");
     }
 
-    // @RequestMapping("/queryFileNewestByFullPath")
+    // @RequestMapping("/test_produce")
     // public AjaxResult queryFileNewestByFullPath(int taskId){
-    //     List<TaskFile> list = taskFileService.getTaskFileListByTaskId(taskId);
-    //     List<File> list1 = fileService.getFileListNewest(list);
-    //     return list1.size() > 0 ? AjaxResult.success(200,list1) : AjaxResult.error("操作失败");
     // }
 
 }

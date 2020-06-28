@@ -29,5 +29,14 @@
         where task_id = #{taskId} and full_path = #{fullPath}
     </update>
 
+    <insert id="insertTaskFileList" useGeneratedKeys="true" parameterType="list">
+        insert into cfg_taskfile
+        (task_id, full_path, file_id)
+        values
+        <foreach collection="list" item="item" separator="," index="index">
+        (#{item.taskId},#{item.fullPath},#{item.fileId})
+        </foreach>
+    </insert>
+
 
 </mapper>

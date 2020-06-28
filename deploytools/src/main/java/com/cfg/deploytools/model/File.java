@@ -17,7 +17,7 @@ public class File implements Serializable {
 
     private static final long serialVersionUID = -5460382475282217061L; // 序列化ID，后续用于 redis 缓存对象
 
-    private Integer fileId; // 任务主键
+    private Integer fileId; // 文件主键
 
     private String fullPath; // 文件全路径
 
@@ -29,6 +29,16 @@ public class File implements Serializable {
     private Timestamp uploadTime; // 文件提交时间
 
     private String type; // 文件类型 0表示文件 1表示SQL内容
+
+    public File() {
+    }
+
+    public File(String fullPath, String fileData, String sqlData, String type) {
+        this.fullPath = fullPath;
+        this.fileData = fileData;
+        this.sqlData = sqlData;
+        this.type = type;
+    }
 
     public Integer getFileId() {
         return fileId;
