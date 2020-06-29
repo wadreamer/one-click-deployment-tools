@@ -51,7 +51,6 @@ public class FileController {
                                  String taskId,
                                  String fileMapLocalPath,
                                  String configurationPath, boolean flag) {
-
         String[] sqlFileArr = sqlFiles != null ? StringUtils.JsonStringHandler(sqlFiles) : null;
         String[] configurationPathArr = fileMapLocalPath != null ? StringUtils.JsonStringHandler(fileMapLocalPath) : null;
 
@@ -62,9 +61,12 @@ public class FileController {
     @ApiOperation(value = "检测冲突", notes = "检测冲突")
     @ResponseBody
     @RequestMapping(value = "/checkConflict")
-    public AjaxResult checkConflict() {
-
-        return null;
+    public AjaxResult checkConflict(String fullPath, String taskId) {
+        System.out.println(fullPath);
+        System.out.println(taskId);
+        // return null;
+        return fileService.checkConflict(fullPath, Integer.parseInt(taskId)).size() > 0 ?
+                AjaxResult.error("文件或存储过程" +  fullPath +"存在冲突，是否继续上传？") : AjaxResult.success("无冲突");
     }
 
 

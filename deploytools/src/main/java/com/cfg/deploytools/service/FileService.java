@@ -108,15 +108,15 @@ public class FileService {
     public List<File> sqlFilesHandler(String[] sqlFiles, String configurationPath) {
         List<File> list = new ArrayList<>();
         if (sqlFiles != null) {
-            String[] strArr = configurationPath.split("\\\\");
-            String projectRootPath = "\\" + strArr[strArr.length - 1];
+            // String[] strArr = configurationPath.split("\\\\");
+            // String projectRootPath = "\\" + strArr[strArr.length - 1];
 
             String realativePath = "";
             File fileCustom;
             for (String sqlJson : sqlFiles) {
                 System.out.println(sqlJson);
                 SQLFile sqlFile = new Gson().fromJson(sqlJson, SQLFile.class);
-                realativePath = projectRootPath + "\\" + sqlFile.getName();
+                realativePath = "\\" + sqlFile.getName();
 
                 fileCustom = new File(realativePath, null, sqlFile.getContent(), "sql");
                 list.add(fileCustom);
