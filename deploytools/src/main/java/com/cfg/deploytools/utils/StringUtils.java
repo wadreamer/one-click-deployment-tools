@@ -406,6 +406,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return columnToJava(tableName);
     }
 
+    // 提取 多个json字符串组成的字符串 中的每个json字符串
     public static String[] JsonStringHandler(String data) {
 
         String pattern = "(\\{[\\s\\S]+?\\})";

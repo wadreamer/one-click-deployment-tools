@@ -33,7 +33,7 @@
     <select id="queryCurrentAllFileByTaskId" parameterType="Integer" resultMap="BaseResultMap">
         select tf.file_id, tf.full_path,
         if(tf.file_id=0, null,f.upload_time) as upload_time,
-        if(SUBSTRING(tf.full_path, POSITION('.' in tf.full_path)) != '.sql', 'file' ,'sql') as type
+        if(SUBSTRING(tf.full_path, POSITION('.' in tf.full_path)) != '.sql', 0 ,1) as type
         from cfg_file f, cfg_taskfile tf
         where f.file_id in (
         SELECT file_id from cfg_taskfile where task_id = #{taskId}
@@ -62,11 +62,11 @@
         values
         <foreach collection="list" item="item" separator="," index="index">
             (
-                #{item.fullPath,jdbcType=VARCHAR},
-                #{item.fileData,jdbcType=VARCHAR},
-                #{item.sqlData,jdbcType=VARCHAR},
+                #{item.fullPath},
+                #{item.fileData},
+                #{item.sqlData},
                 now(),
-                #{item.type,jdbcType=INTEGER}
+                #{item.type}
             )
         </foreach>
     </insert>

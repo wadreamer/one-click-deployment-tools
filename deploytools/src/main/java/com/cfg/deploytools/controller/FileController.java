@@ -50,7 +50,7 @@ public class FileController {
                                  String sqlFiles,
                                  String taskId,
                                  String fileMapLocalPath,
-                                 String configurationPath, boolean flag) {
+                                 String configurationPath) {
         String[] sqlFileArr = sqlFiles != null ? StringUtils.JsonStringHandler(sqlFiles) : null;
         String[] configurationPathArr = fileMapLocalPath != null ? StringUtils.JsonStringHandler(fileMapLocalPath) : null;
 

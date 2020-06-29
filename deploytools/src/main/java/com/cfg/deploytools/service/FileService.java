@@ -95,7 +95,7 @@ public class FileService {
                     content = FileUtils.readFileByChars(file.getInputStream()); // 文件内容
                     relativePath = map.get(file.getOriginalFilename()); // 文件相对路径
 
-                    fileCustom = new File(relativePath, content, null, "file");
+                    fileCustom = new File(relativePath, content, null, 0);
                     fileList.add(fileCustom);
                 }
             } catch (Exception e) {
@@ -118,7 +118,7 @@ public class FileService {
                 SQLFile sqlFile = new Gson().fromJson(sqlJson, SQLFile.class);
                 realativePath = "\\" + sqlFile.getName();
 
-                fileCustom = new File(realativePath, null, sqlFile.getContent(), "sql");
+                fileCustom = new File(realativePath, null, sqlFile.getContent(), 1);
                 list.add(fileCustom);
             }
         }

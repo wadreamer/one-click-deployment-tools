@@ -28,12 +28,12 @@ public class File implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp uploadTime; // 文件提交时间
 
-    private String type; // 文件类型 0表示文件 1表示SQL内容
+    private Integer type; // 文件类型 0表示文件 1表示SQL内容
 
     public File() {
     }
 
-    public File(String fullPath, String fileData, String sqlData, String type) {
+    public File(String fullPath, String fileData, String sqlData, Integer type) {
         this.fullPath = fullPath;
         this.fileData = fileData;
         this.sqlData = sqlData;
@@ -80,11 +80,11 @@ public class File implements Serializable {
         this.uploadTime = updateTime;
     }
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 }
