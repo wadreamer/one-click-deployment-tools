@@ -103,6 +103,7 @@ public class FileController {
      * @param fileId
      * @return
      */
+    @ApiOperation(value = "部署单个文件", notes = "部署单个文件")
     @RequestMapping("/deployFile")
     @ResponseBody
     public AjaxResult deployFile(int fileId) {

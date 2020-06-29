@@ -9,6 +9,7 @@
         <result column="sql_data" property="sqlData" jdbcType="LONGVARCHAR"/>
         <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP"/>
         <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="name" property="taskName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <delete id="deleteFileByFileIdArray">
@@ -106,9 +107,10 @@
     </select>
 
     <select id="queryFileById" parameterType="int" resultMap="BaseResultMap">
-        select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type
-        from cfg_file f
-        where f.file_id = #{fileId}
+        select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type, zt.name
+        from cfg_file f, zt_task zt
+        where f.file_id = #{fileId} and zt.id =
+        (select cfg_taskfile.task_id from cfg_taskfile where cfg_taskfile.file_id = #{fileId})
     </select>
 
     <select id="queryFilesIdByTaskId" resultType="Integer" parameterType="Integer">

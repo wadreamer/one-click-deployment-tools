@@ -49,9 +49,9 @@ public class LoginController {
             subject.login(token);
             return AjaxResult.success(200,"登入成功");
         }catch (UnknownAccountException e){
-            return AjaxResult.error(401, "账户错误");
+            return AjaxResult.error(401, "账户错误（请输入禅道的用户名）");
         }catch (IncorrectCredentialsException e){
-            return AjaxResult.error(402, "密码错误");
+            return AjaxResult.error(402, "密码错误（请输入禅道用户名对应密码）");
         }
     }
 
