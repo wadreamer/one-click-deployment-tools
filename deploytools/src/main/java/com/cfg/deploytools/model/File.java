@@ -25,6 +25,16 @@ public class File implements Serializable {
 
     private String sqlData; // SQL内容
 
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    private String taskName; // 文件任务姓名
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp uploadTime; // 文件提交时间
 
