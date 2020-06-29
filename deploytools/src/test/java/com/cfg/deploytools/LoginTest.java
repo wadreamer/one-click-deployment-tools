@@ -5,6 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @SpringBootTest
 public class LoginTest {
     @Autowired
@@ -12,8 +17,24 @@ public class LoginTest {
 
 
     @Test
-    public void testLog(){
-        System.out.println("用户账户：" + userService.queryUserByAccount("linww").getAccount());
-        System.out.println("用户密码：" + userService.queryUserByAccount("linww").getPassword());
+    public void testLog() {
+        String s = "{\"name\": \"test2.sql\", \"content\": \"dasdas,asdqwasd,qwead;qweljdas,dqwe; adasdas dasdas\"},{\"name\": \"test1.sql\", \"content\": \"dasdas,asdqwasd,qwead;qweljdas,dqwe; adasdas dasdas\"}";
+        String pattern = "(\\{[\\s\\S]+?\\})";
+
+        Pattern p = Pattern.compile(pattern);
+
+        Matcher m = p.matcher(s);
+
+        ArrayList<String> arr = new ArrayList<String >();
+        while(m.find()){
+            arr.add(m.group(1));
+        }
+
+        for(String s1 : arr){
+            System.out.println(s1);
+        }
+
     }
+
 }
+

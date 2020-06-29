@@ -3,8 +3,12 @@ package com.cfg.deploytools.utils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang.text.StrBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -403,12 +407,20 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
     public static String[] JsonStringHandler(String data) {
-        String[] strArr = data != null ? data.split(",", -1) : null;
-        if (strArr != null) {
-            for (int i = 0; i < strArr.length; i++) {
-                strArr[i] = strArr[i].replace("and", ",");
-            }
+
+        String pattern = "(\\{[\\s\\S]+?\\})";
+
+        Pattern p = Pattern.compile(pattern);
+
+        Matcher m = p.matcher(data);
+
+        ArrayList<String> arr = new ArrayList<String>();
+        while(m.find()){
+            arr.add(m.group(1));
         }
-        return strArr;
+
+        String[] strArr = new String[arr.size()];
+
+        return arr.toArray(strArr);
     }
 }
