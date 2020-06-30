@@ -31,30 +31,28 @@
     </select>
 
     <select id="queryCurrentAllFileByTaskId" parameterType="Integer" resultMap="BaseResultMap">
-        select
-        f.file_id, f.full_path,
-        if(tf.file_id=0, null,f.upload_time) as upload_time,
-        if(SUBSTRING(tf.full_path, POSITION('.' in tf.full_path)) != '.sql', 0 ,1) as type
-        from cfg_file f, cfg_taskfile tf
-        where f.file_id = tf.file_id and tf.task_id = #{taskId}
-        union
-        select
-        '0' as file_id, f.full_path,
-        if(tf.file_id=0, null,f.upload_time) as upload_time,
-        if(SUBSTRING(tf.full_path, POSITION('.' in tf.full_path)) != '.sql', 0 ,1) as type
-        from cfg_file f, cfg_taskfile tf
-        where f.full_path = tf.full_path and tf.task_id = '23' and f.full_path not in (
-        select tf.full_path from cfg_file f, cfg_taskfile tf where f.file_id = tf.file_id and tf.task_id = #{taskId})
-        group by f.full_path
+        SELECT
+        tf.task_id, tf.full_path, tf.file_id,
+        f.file_data, f.sql_data, f.upload_time, if(SUBSTRING(tf.full_path, POSITION('.' in tf.full_path)) != '.sql', 0 ,1) as type
+        from cfg_taskfile tf  LEFT JOIN cfg_file f
+        on tf.full_path = f.full_path and tf.file_id = f.file_id
+        where tf.task_id =7;
     </select>
-
-    <!--<select id="queryCurrentAllFileByTaskId" parameterType="Integer" resultMap="BaseResultMap">-->
-    <!--    select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type-->
-    <!--    from cfg_file f-->
-    <!--    where f.file_id in (-->
-    <!--    SELECT file_id from cfg_taskfile where task_id = #{taskId}-->
-    <!--    )-->
-    <!--</select>-->
+    <!--select-->
+    <!--f.file_id, f.full_path,-->
+    <!--if(tf.file_id=0, null,f.upload_time) as upload_time,-->
+    <!--if(SUBSTRING(tf.full_path, POSITION('.' in tf.full_path)) != '.sql', 0 ,1) as type-->
+    <!--from cfg_file f, cfg_taskfile tf-->
+    <!--where f.file_id = tf.file_id and tf.task_id = #{taskId}-->
+    <!--union-->
+    <!--select-->
+    <!--'0' as file_id, f.full_path,-->
+    <!--if(tf.file_id=0, null,f.upload_time) as upload_time,-->
+    <!--if(SUBSTRING(tf.full_path, POSITION('.' in tf.full_path)) != '.sql', 0 ,1) as type-->
+    <!--from cfg_file f, cfg_taskfile tf-->
+    <!--where f.full_path = tf.full_path and tf.task_id = '23' and f.full_path not in (-->
+    <!--select tf.full_path from cfg_file f, cfg_taskfile tf where f.file_id = tf.file_id and tf.task_id = #{taskId})-->
+    <!--group by f.full_path-->
 
     <select id="queryFileHistoryByFullPath" parameterType="String" resultMap="BaseResultMap">
         select f.file_id, f.full_path, f.file_data, f.sql_data, f.upload_time, f.type
