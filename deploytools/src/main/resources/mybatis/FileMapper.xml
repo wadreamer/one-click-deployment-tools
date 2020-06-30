@@ -31,14 +31,21 @@
     </select>
 
     <select id="queryCurrentAllFileByTaskId" parameterType="Integer" resultMap="BaseResultMap">
-        select tf.file_id, tf.full_path,
+        select
+        f.file_id, f.full_path,
         if(tf.file_id=0, null,f.upload_time) as upload_time,
         if(SUBSTRING(tf.full_path, POSITION('.' in tf.full_path)) != '.sql', 0 ,1) as type
         from cfg_file f, cfg_taskfile tf
-        where f.file_id in (
-        SELECT file_id from cfg_taskfile where task_id = #{taskId}
-        )
-        GROUP BY tf.full_path
+        where f.file_id = tf.file_id and tf.task_id = #{taskId}
+        union
+        select
+        '0' as file_id, f.full_path,
+        if(tf.file_id=0, null,f.upload_time) as upload_time,
+        if(SUBSTRING(tf.full_path, POSITION('.' in tf.full_path)) != '.sql', 0 ,1) as type
+        from cfg_file f, cfg_taskfile tf
+        where f.full_path = tf.full_path and tf.task_id = '23' and f.full_path not in (
+        select tf.full_path from cfg_file f, cfg_taskfile tf where f.file_id = tf.file_id and tf.task_id = #{taskId})
+        group by f.full_path
     </select>
 
     <!--<select id="queryCurrentAllFileByTaskId" parameterType="Integer" resultMap="BaseResultMap">-->
