@@ -38,9 +38,14 @@ public class FileController {
 
     /*
      * @Author wadreamer
-     * @Description //TODO 多文件上传
-     * @Date 11:49 2020/6/8
-     * @Param [files]
+     * @Description //TODO 文件上传
+     * @Date 11:34 2020/7/3
+     * @Param [files             --> TODO 普通文件
+     *         sqlFiles          --> TODO SQL 或 存储过程
+     *         taskId            --> TODO 任务主键
+     *         fileMapLocalPath  --> TODO 普通文件和本地绝地路径的映射关系
+     *         configurationPath --> TODO 本地项目根路径
+     *        ]
      * @return com.cfg.deploytools.common.domain.AjaxResult
      **/
     @ApiOperation(value = "上传文件", notes = "上传文件")
@@ -51,6 +56,10 @@ public class FileController {
                                  String taskId,
                                  String fileMapLocalPath,
                                  String configurationPath) {
+
+        System.out.println(sqlFiles);
+        System.out.println(fileMapLocalPath);
+
         String[] sqlFileArr = sqlFiles != null ? StringUtils.JsonStringHandler(sqlFiles) : null;
         String[] configurationPathArr = fileMapLocalPath != null ? StringUtils.JsonStringHandler(fileMapLocalPath) : null;
 

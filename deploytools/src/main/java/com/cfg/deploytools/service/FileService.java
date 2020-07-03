@@ -9,6 +9,7 @@ import com.cfg.deploytools.model.TaskFile;
 import com.cfg.deploytools.utils.FileUtils;
 import com.google.gson.Gson;
 import org.apache.shiro.crypto.hash.Hash;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,8 +42,8 @@ public class FileService {
 
     @Transactional
     public AjaxResult upload(MultipartFile[] multipartFiles, String[] sqlFiles, Integer taskId, String[] fileMapLocalPath, String configurationPath) {
-        List<File> filesList = multipartFilesHandler(multipartFiles, fileMapLocalPath, configurationPath);
-        List<File> sqlFilesList = sqlFilesHandler(sqlFiles, configurationPath);
+        List<File> filesList = multipartFilesHandler(multipartFiles, fileMapLocalPath, configurationPath); // 将 上传的文件 处理为 自定义的 File类
+        List<File> sqlFilesList = sqlFilesHandler(sqlFiles, configurationPath); // 将 sqlFiles 处理为 自定义的File类
 
         List<File> list = new ArrayList<>();
         list.addAll(filesList);
@@ -82,7 +83,7 @@ public class FileService {
 
                 int end = fmp.getLocalPath().length();
                 int start = configurationPath.length();
-                fmp.setLocalPath(fmp.getLocalPath().substring(start, end - 1)); // 设置文件的相对路径
+                fmp.setLocalPath(fmp.getLocalPath().substring(start, end)); // 设置文件的相对路径
 
                 map.put(fmp.getName(), fmp.getLocalPath());
             }
@@ -96,6 +97,7 @@ public class FileService {
                     relativePath = map.get(file.getOriginalFilename()); // 文件相对路径
 
                     fileCustom = new File(relativePath, content, null, 0);
+                    System.out.println("------------------->" + new Gson().toJson(fileCustom));
                     fileList.add(fileCustom);
                 }
             } catch (Exception e) {
@@ -107,18 +109,15 @@ public class FileService {
 
     public List<File> sqlFilesHandler(String[] sqlFiles, String configurationPath) {
         List<File> list = new ArrayList<>();
-        if (sqlFiles != null) {
-            // String[] strArr = configurationPath.split("\\\\");
-            // String projectRootPath = "\\" + strArr[strArr.length - 1];
-
+        if (sqlFiles != null && sqlFiles.length != 0) {
             String realativePath = "";
             File fileCustom;
             for (String sqlJson : sqlFiles) {
                 System.out.println(sqlJson);
                 SQLFile sqlFile = new Gson().fromJson(sqlJson, SQLFile.class);
-                realativePath = "\\" + sqlFile.getName();
+                realativePath = sqlFile.getName();
 
-                fileCustom = new File(realativePath, null, sqlFile.getContent(), 1);
+                fileCustom = new File(realativePath, null, sqlFile.getContent(), Integer.parseInt(sqlFile.getType()));
                 list.add(fileCustom);
             }
         }

@@ -27,7 +27,7 @@
         t.status,
         t.openedBy, t.openedDate, t.finishedBy, t.finishedDate, t.assignedDate
         from
-        zt_task t, cfg_taskstatus ts
+        zt_task t
         where
         t.project = #{projectId}
         and t.id not in(select task_id from cfg_taskstatus)

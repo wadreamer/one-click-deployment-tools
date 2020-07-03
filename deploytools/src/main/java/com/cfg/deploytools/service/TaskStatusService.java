@@ -94,17 +94,23 @@ public class TaskStatusService {
         // 3. 清空 任务完成人 任务完成时间
 
         List<TaskFile> taskFileList = taskFileService.getTaskFileListByTaskId(taskStatus.getTaskId()); // 获取当前任务正在使用的任务文件实体
+        if(taskFileList.size() > 0) {
+            int result_del_file = fileService.deleteFile(taskFileList); // 删除正在使用的文件
 
-        int result_del_file = fileService.deleteFile(taskFileList); // 删除正在使用的文件
+            int result_del_taskstatus = taskStatusMapper.deleteTaskStatusForReject(taskStatus.getTaskId()); // 删除 cfg_taskstatus 表中的记录
 
-        int result_del_taskstatus = taskStatusMapper.deleteTaskStatusForReject(taskStatus.getTaskId()); // 删除 cfg_taskstatus 表中的记录
+            int result_del_taskfile = taskFileService.deleteTaskFile(taskFileList);
 
-        int result_del_taskfile = taskFileService.deleteTaskFile(taskFileList);
+            int result_zt_task = taskStatusMapper.updateTaskStatusForReject(taskStatus); // 修改禅道数据库中的任务状态
+            return (result_del_file > 0 && result_del_taskstatus > 0 && result_del_taskfile > 0 && result_zt_task > 0) ?
+                    AjaxResult.success(200, "操作成功") : AjaxResult.error("操作失败");
+        }else{
+            int result_zt_task = taskStatusMapper.updateTaskStatusForReject(taskStatus); // 修改禅道数据库中的任务状态
 
-        int result_zt_task = taskStatusMapper.updateTaskStatusForReject(taskStatus); // 修改禅道数据库中的任务状态
+            return result_zt_task > 0?  AjaxResult.success("操作成功") : AjaxResult.error("操作失败，请稍后重试");
+        }
 
-        return (result_del_file > 0 && result_del_taskstatus > 0 && result_del_taskfile > 0 && result_zt_task > 0) ?
-                AjaxResult.success(200, "操作成功") : AjaxResult.error("操作失败");
+
     }
 
 }
